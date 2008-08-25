@@ -5,10 +5,14 @@ class dell::hwtools {
         require => Yumrepo["dell-software-repo"],
     }
 
-    package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "instsvc-drivers", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
-        ensure => present,
-        require => [Yumrepo["dell-hardware-main"], Yumrepo["dell-hardware-auto"]],
-        #onlyif => "/usr/sbin/getSystemId > /dev/null",
+    # TODO: puppet fact qui check la valeur de retour de /usr/sbin/getSystemId
+    case $openmanagesupported {
+        yes: {
+            package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "instsvc-drivers", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
+                ensure => present,
+                require => [Yumrepo["dell-hardware-main"], Yumrepo["dell-hardware-auto"]],
+            }
+        }
     }
 
     # Dans ce repo, on trouve entre autre de quoi flasher bios&firmware ainsi
