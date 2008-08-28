@@ -1,35 +1,38 @@
-class dell::hwtools {
+class dell::openmanage inherits dell::hwtools {
 
-    package{["libsmbios", "smbios-utils", "firmware-tools", "firmware-addon-dell"]:
+    # le plugin yum qui nous trouve le bon build d'openmanage pour notre
+    # système.
+    package{"firmware-addon-dell":
         ensure => present,
         require => Yumrepo["dell-software-repo"],
     }
 
-    # TODO: puppet fact qui check la valeur de retour de /usr/sbin/getSystemId
-    case $openmanagesupported {
+    # Ces 2 repos hébergent openmanage, mais dépendent d'un plugin yum qui
+    # va le analyser hardware et échoue si le système n'est pas supporté.
+    #
+    # IMPORTANT: il faut tenir à jour la liste des systèmes supportés dans
+    # plugins/facter/isopenmanagesupported.rb
+    #
+    case $isopenmanagesupported {
         yes: {
             package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "instsvc-drivers", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
                 ensure => present,
                 require => [Yumrepo["dell-hardware-main"], Yumrepo["dell-hardware-auto"]],
             }
+
+            service{"dataeng":
+                ensure => running,
+                require => [Package["srvadmin-deng"], Package["srvadmin-storage"]],
+            }
+        }
+
+        no: {
+            exec{"unsupported openmanage warning":
+                command => "echo 'Either you have included included this class on an unsupported machine (you shouldn\'t) or you haven\'t updated the list of supported systems in \$isopenmanagesupported.' && exit 1",
+            }
         }
     }
 
-    # Dans ce repo, on trouve entre autre de quoi flasher bios&firmware ainsi
-    # que le plugin yum qui donne accès à openmanage
-    # http://linux.dell.com/wiki/index.php/Repository/software
-    yumrepo {"dell-software-repo":
-        descr => "Unsupported Dell Software",
-        mirrorlist => "http://linux.dell.com/repo/software/mirrors.pl?osname=el\$releasever&basearch=\$basearch",
-        enabled => 1,
-        gpgcheck => 1,
-        gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
-        includepkgs => "libsmbios, smbios-utils, firmware-tools, firmware-addon-dell",
-        require => [File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]]
-    }
-
-    # Ces 2 repos hébergent openmanage, mais dépendent d'un plugin yum qui
-    # va le analyser hardware et échoue si le système n'est pas supporté.
     # http://linux.dell.com/repo/hardware/
     yumrepo {"dell-hardware-main":
         descr => "Dell unofficial hardware repository - hardware independent repo",
@@ -38,7 +41,7 @@ class dell::hwtools {
         gpgcheck => 1,
         gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
         includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip",
-        require => Package["firmware-addon-dell"],
+        require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
     }
 
     yumrepo {"dell-hardware-auto":
@@ -48,18 +51,8 @@ class dell::hwtools {
         gpgcheck => 1,
         gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
         includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip",
-        require => Package["firmware-addon-dell"],
+        require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
     }
 
-    file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-dell":
-        ensure => present,
-        source => "puppet:///dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
-        mode => 644,
-    }
-
-    file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios":
-        ensure => present,
-        source => "puppet:///dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-        mode => 644,
-    }
 }
+
