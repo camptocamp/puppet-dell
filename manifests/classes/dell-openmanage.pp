@@ -15,7 +15,7 @@ class dell::openmanage inherits dell::hwtools {
     #
     case $isopenmanagesupported {
         yes: {
-            package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "instsvc-drivers", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
+            package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
                 ensure => present,
                 require => [Yumrepo["dell-hardware-main"], Yumrepo["dell-hardware-auto"]],
             }
@@ -39,8 +39,8 @@ class dell::openmanage inherits dell::hwtools {
         mirrorlist => "http://linux.dell.com/repo/hardware/mirrors.pl?osname=el\$releasever&basearch=\$basearch&repo_config=\$repo_config&dellsysidpluginver=\$dellsysidpluginver",
         enabled => 1,
         gpgcheck => 1,
-        gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
-        includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip",
+        gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
+        includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip, srvadmin-syscheck",
         require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
     }
 
@@ -49,8 +49,8 @@ class dell::openmanage inherits dell::hwtools {
         mirrorlist => "http://linux.dell.com/repo/hardware/mirrors.pl?sys_ven_id=\$sys_ven_id&sys_dev_id=\$sys_dev_id&osname=el\$releasever&basearch=\$basearch&repo_config=\$repo_config&dellsysidpluginver=\$dellsysidpluginver",
         enabled => 1,
         gpgcheck => 1,
-        gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
-        includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip",
+        gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
+        includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip, srvadmin-syscheck",
         require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
     }
 

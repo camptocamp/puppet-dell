@@ -25,7 +25,7 @@ class dell::hwtools {
         mirrorlist => "http://linux.dell.com/repo/software/mirrors.pl?osname=el\$releasever&basearch=\$basearch",
         enabled => 1,
         gpgcheck => 1,
-        gpgkey => ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell", "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"],
+        gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
         includepkgs => "libsmbios, smbios-utils, firmware-tools, firmware-addon-dell",
         require => [File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]]
     }
