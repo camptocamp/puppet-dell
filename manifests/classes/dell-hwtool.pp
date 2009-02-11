@@ -3,8 +3,8 @@ class dell::hwtools {
     # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
     # bios & firmwares.
     package{["libsmbios", "smbios-utils", "firmware-tools"]:
-        ensure => present,
-        require => Yumrepo["dell-software-repo"],
+        ensure => latest,
+        require => Yumrepo["dell-omsa-indep"],
     }
 
     file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-dell":
@@ -20,9 +20,9 @@ class dell::hwtools {
     }
 
     # http://linux.dell.com/wiki/index.php/Repository/software
-    yumrepo {"dell-software-repo":
-        descr => "Unsupported Dell Software",
-        mirrorlist => "http://linux.dell.com/repo/software/mirrors.pl?osname=el\$releasever&basearch=\$basearch",
+    yumrepo {"dell-omsa-indep":
+        descr => "Dell OMSA repository - Hardware independent",
+        mirrorlist => "http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&dellsysidpluginver=\$dellsysidpluginver",
         enabled => 1,
         gpgcheck => 1,
         gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
@@ -30,5 +30,8 @@ class dell::hwtools {
         require => [File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]]
     }
 
+    file { "/etc/yum.repos.d/dell-software-repo.repo":
+        ensure => absent,
+    }
 
 }
