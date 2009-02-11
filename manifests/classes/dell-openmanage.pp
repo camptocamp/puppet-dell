@@ -3,7 +3,7 @@ class dell::openmanage inherits dell::hwtools {
   # le plugin yum qui nous trouve le bon build d'openmanage pour notre
   # système.
   package{"firmware-addon-dell":
-    ensure => present,
+    ensure => latest,
     require => Yumrepo["dell-omsa-indep"],
   }
 
@@ -17,7 +17,7 @@ class dell::openmanage inherits dell::hwtools {
     yes: {
       package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
         ensure => present,
-        require => Yumrepo["dell-omsa-specific"],
+        require => [Yumrepo["dell-omsa-specific"], Package["firmware-addon-dell"]],
       }
 
       service{"dataeng":
