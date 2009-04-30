@@ -26,7 +26,7 @@ class dell::hwtools {
     enabled => 1,
     gpgcheck => 1,
     gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-    includepkgs => "libsmbios, smbios-utils, firmware-tools, firmware-addon-dell",
+    includepkgs => "libsmbios, smbios-utils, firmware-tools, firmware-addon-dell, smbios-utils-bin, smbios-utils-python, python-smbios",
     require => [File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]]
   }
 
