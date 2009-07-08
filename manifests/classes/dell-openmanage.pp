@@ -29,12 +29,6 @@ class dell::openmanage inherits dell::hwtools {
         require => Package["srvadmin-omilcore"],
       }
 
-      package { ["srvadmin-omcommon"]:
-        ensure => present,
-        tag => "openmanage",
-        require => [Package["srvadmin-omilcore"], Package["srvadmin-deng"], Package["srvadmin-syscheck"]],
-      }
-
       package { ["srvadmin-cm"]:
         ensure => present,
         tag => "openmanage",
@@ -56,7 +50,7 @@ class dell::openmanage inherits dell::hwtools {
       package { "srvadmin-omacore":
         ensure => present,
         tag => "openmanage",
-        require => [Package["srvadmin-deng"], Package["srvadmin-omcommon"], Package["srvadmin-omilcore"]],
+        require => [Package["srvadmin-deng"], Package["srvadmin-omilcore"]],
       }
 
       package { "srvadmin-omilcore":
