@@ -4,6 +4,7 @@ class dell::openmanage inherits dell::hwtools {
   # système.
   package{"firmware-addon-dell":
     ensure => latest,
+    tag => "openmanage",
     require => Yumrepo["dell-omsa-indep"],
   }
 
@@ -15,13 +16,58 @@ class dell::openmanage inherits dell::hwtools {
   #
   case $isopenmanagesupported {
     yes: {
-      package{["srvadmin-omilcore", "srvadmin-deng", "srvadmin-omauth", "srvadmin-omacore", "srvadmin-odf", "srvadmin-storage", "srvadmin-ipmi", "srvadmin-cm", "srvadmin-hapi", "srvadmin-isvc", "srvadmin-omhip"]:
+
+      package { ["srvadmin-storage", "srvadmin-omhip"]:
         ensure => present,
+        tag => "openmanage",
+        require => Package["srvadmin-omacore"],
+      }
+
+      package { ["srvadmin-hapi", "srvadmin-syscheck", "srvadmin-omauth"]:
+        ensure => present,
+        tag => "openmanage",
+        require => Package["srvadmin-omilcore"],
+      }
+
+      package { ["srvadmin-omcommon"]:
+        ensure => present,
+        tag => "openmanage",
+        require => [Package["srvadmin-omilcore"], Package["srvadmin-deng"], Package["srvadmin-syscheck"]],
+      }
+
+      package { ["srvadmin-cm"]:
+        ensure => present,
+        tag => "openmanage",
+        require => [Package["srvadmin-omacore"], Package["srvadmin-syscheck"]],
+      }
+
+      package { ["srvadmin-isvc"]:
+        ensure => present,
+        tag => "openmanage",
+        require => [Package["srvadmin-hapi"], Package["srvadmin-deng"], Package["srvadmin-syscheck"]],
+      }
+
+      package { "srvadmin-deng":
+        ensure => present,
+        tag => "openmanage",
+        require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
+      }
+
+      package { "srvadmin-omacore":
+        ensure => present,
+        tag => "openmanage",
+        require => [Package["srvadmin-deng"], Package["srvadmin-omcommon"], Package["srvadmin-omilcore"]],
+      }
+
+      package { "srvadmin-omilcore":
+        ensure => present,
+        tag => "openmanage",
         require => [Yumrepo["dell-omsa-specific"], Package["firmware-addon-dell"]],
       }
 
       service{"dataeng":
         ensure => running,
+        tag => "openmanage",
         require => [Package["srvadmin-deng"], Package["srvadmin-storage"]],
       }
     }
