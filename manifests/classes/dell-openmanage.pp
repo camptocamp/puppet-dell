@@ -79,7 +79,7 @@ class dell::openmanage inherits dell::hwtools {
       service { "dataeng":
         ensure => running,
         tag => "openmanage",
-        require => [Package["srvadmin-deng"], Package["srvadmin-storage"]],
+        require => [Package["srvadmin-deng"], Package["srvadmin-storage"], Package["srvadmin-omhip"], Package["srvadmin-omauth"]],
       }
 
       augeas { "disable dell yum plugin once OM is installed":
