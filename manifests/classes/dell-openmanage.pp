@@ -1,93 +1,45 @@
-class dell::openmanage inherits dell::hwtools {
+class dell::openmanage {
 
-  # le plugin yum qui nous trouve le bon build d'openmanage pour notre
-  # système.
-  package{"firmware-addon-dell":
-    ensure => latest,
-    tag => "openmanage",
-    require => Yumrepo["dell-omsa-indep"],
-  }
+  include dell::hwtools
 
-  # TODO: disable yum repositories une fois que OM est installé
-
-  # Ces 2 repos hébergent openmanage, mais dépendent d'un plugin yum qui
-  # va le analyser hardware et échoue si le système n'est pas supporté.
-  #
   # IMPORTANT: il faut tenir à jour la liste des systèmes supportés dans
   # plugins/facter/isopenmanagesupported.rb
   #
+  # Voir http://linux.dell.com/repo/hardware/latest
   case $isopenmanagesupported {
     yes: {
 
-      # workaround broken yum repository
-      $url = "http://linux.dell.com/repo/hardware/latest/pe2970/rh${lsbmajdistrelease}0/srvadmin"
-      $ver = "6.1.0-648"
+      case $operatingsystem {
+        RedHat: {
 
-      package { "srvadmin-omilcore":
-        ensure => present,
-        provider => "rpm",
-        source => "${url}/srvadmin-omilcore-${ver}.i386.rpm",
-        tag => "openmanage",
-        require => [Yumrepo["dell-omsa-specific"], Package["firmware-addon-dell"]],
+          # openmanage is a mess to install on redhat, and recent versions
+          # don't support older hardware. So puppet will install it if absent,
+          # or else leave it unmanaged.
+          if $srvadminpkgcount < 10 {
+            include dell::openmanage::redhat
+          }
+
+          augeas { "disable dell yum plugin once OM is installed":
+            changes => "set /files/etc/yum/pluginconf.d/dellsysidplugin.conf/main/enabled 0",
+            require => Service["dataeng"],
+            notify  => Exec["update yum cache"],
+          }
+
+          service { "dataeng":
+            ensure => running,
+          }
+
+        }
+
+        Debian: {
+          include dell::openmanage::debian
+        }
+
+        default: {
+          err("Unsupported operatingsystem: $operatingsystem.")
+        }
+
       }
-
-      package { "srvadmin-deng":
-        ensure => present,
-        provider => "rpm",
-        source => "${url}/srvadmin-deng-${ver}.i386.rpm",
-        tag => "openmanage",
-        require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
-      }
-
-      package { "srvadmin-omcommon":
-        ensure => present,
-        provider => "rpm",
-        source => "${url}/srvadmin-omcommon-${ver}.i386.rpm",
-        tag => "openmanage",
-        require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
-      }
-
-      package { ["srvadmin-hapi", "srvadmin-syscheck", "srvadmin-omauth"]:
-        ensure => present,
-        require => Package["srvadmin-omilcore"],
-      }
-
-      package { ["srvadmin-storage", "srvadmin-omhip"]:
-        ensure => present,
-        tag => "openmanage",
-        require => Package["srvadmin-omacore"],
-      }
-
-      package { "srvadmin-cm":
-        ensure => present,
-        tag => "openmanage",
-        require => [Package["srvadmin-omacore"], Package["srvadmin-syscheck"]],
-      }
-
-      package { "srvadmin-isvc":
-        ensure => present,
-        tag => "openmanage",
-        require => [Package["srvadmin-hapi"], Package["srvadmin-deng"], Package["srvadmin-syscheck"], Package["srvadmin-omacore"]],
-      }
-
-      package { "srvadmin-omacore":
-        ensure => present,
-        tag => "openmanage",
-        require => [Package["srvadmin-deng"], Package["srvadmin-omilcore"], Package["srvadmin-omcommon"]],
-      }
-
-      service { "dataeng":
-        ensure => running,
-        tag => "openmanage",
-        require => [Package["srvadmin-deng"], Package["srvadmin-storage"], Package["srvadmin-omhip"], Package["srvadmin-omauth"]],
-      }
-
-      augeas { "disable dell yum plugin once OM is installed":
-        changes => "set /files/etc/yum/pluginconf.d/dellsysidplugin.conf/main/enabled 0",
-        require => Service["dataeng"],
-        notify  => Exec["update yum cache"],
-      }
-
     }
 
     no: {
@@ -96,7 +48,72 @@ class dell::openmanage inherits dell::hwtools {
       }
     }
   }
+}
 
+class dell::openmanage::redhat {
+
+  # le plugin yum qui nous trouve le bon build d'openmanage pour notre
+  # système.
+  package{"firmware-addon-dell":
+    ensure => latest,
+  }
+
+  # workaround broken yum repository
+  $url = "http://linux.dell.com/repo/hardware/latest/pe2970/rh${lsbmajdistrelease}0/srvadmin"
+  $ver = "6.1.0-648"
+
+  package { "srvadmin-omilcore":
+    ensure => present,
+    provider => "rpm",
+    source => "${url}/srvadmin-omilcore-${ver}.i386.rpm",
+    require => [Yumrepo["dell-omsa-specific"], Package["firmware-addon-dell"]],
+  }
+
+  package { "srvadmin-deng":
+    ensure => present,
+    provider => "rpm",
+    source => "${url}/srvadmin-deng-${ver}.i386.rpm",
+    require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
+    before  => Service["dataeng"],
+  }
+
+  package { "srvadmin-omcommon":
+    ensure => present,
+    provider => "rpm",
+    source => "${url}/srvadmin-omcommon-${ver}.i386.rpm",
+    require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
+  }
+
+  package { ["srvadmin-hapi", "srvadmin-syscheck", "srvadmin-omauth"]:
+    ensure => present,
+    require => Package["srvadmin-omilcore"],
+    before  => Service["dataeng"],
+  }
+
+  package { ["srvadmin-storage", "srvadmin-omhip"]:
+    ensure => present,
+    require => Package["srvadmin-omacore"],
+    before  => Service["dataeng"],
+  }
+
+  package { "srvadmin-cm":
+    ensure => present,
+    require => [Package["srvadmin-omacore"], Package["srvadmin-syscheck"]],
+  }
+
+  package { "srvadmin-isvc":
+    ensure => present,
+    require => [Package["srvadmin-hapi"], Package["srvadmin-deng"], Package["srvadmin-syscheck"], Package["srvadmin-omacore"]],
+  }
+
+  package { "srvadmin-omacore":
+    ensure => present,
+    require => [Package["srvadmin-deng"], Package["srvadmin-omilcore"], Package["srvadmin-omcommon"]],
+  }
+
+  # Ce repo héberge openmanage, mais dépendent d'un plugin yum qui
+  # va analyser le hardware et échoue si le système n'est pas supporté.
+  #
   # http://linux.dell.com/repo/hardware/latest
   yumrepo {"dell-omsa-specific":
     descr => "Dell OMSA repository - Hardware specific",
@@ -114,3 +131,6 @@ class dell::openmanage inherits dell::hwtools {
 
 }
 
+class dell::openmanage::debian {
+  #TODO
+}
