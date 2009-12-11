@@ -20,7 +20,7 @@ Facter.add("isopenmanagesupported") do
 
             if systemid.nil? or systemid.length != 2
                 "no"
-            elsif output =~ /^Is Dell:\s+1$/ and supported.include?(systemid[1].downcase)
+            elsif output =~ /^Vendor:.*Dell.*$/i and supported.include?(systemid[1].downcase)
                 "yes"
             else
                 "no"
