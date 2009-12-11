@@ -14,8 +14,8 @@ supported = ["0x01b1", "0x01b2", "0x01b3", "0x01b6", "0x01b7", "0x01b8", "0x01bb
 Facter.add("isopenmanagesupported") do
     setcode do
 
-        if FileTest.exists?("/usr/sbin/smbios-sys-info-lite")
-            output = %x{/usr/sbin/smbios-sys-info-lite}
+        if FileTest.exists?("/usr/sbin/getSystemId")
+            output = %x{/usr/sbin/getSystemId}
             systemid = /^System ID:\s+(.*)$/.match(output)
 
             if systemid.nil? or systemid.length != 2
