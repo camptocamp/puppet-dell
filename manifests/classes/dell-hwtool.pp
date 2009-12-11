@@ -2,15 +2,18 @@ class dell::hwtools {
 
   # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
   # bios & firmwares.
-  package{["libsmbios", "smbios-utils", "firmware-tools"]:
-    ensure => latest,
-  }
 
   case $operatingsystem {
     Debian: {
       #TODO
+      package {"libsmbios-bin":
+        ensure => latest,
+      }
     }
     RedHat: {
+      package{["libsmbios", "smbios-utils", "firmware-tools"]:
+        ensure => latest,
+      }
 
       file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-dell":
         ensure => present,
