@@ -20,7 +20,9 @@ class dell::openmanage {
           }
 
           augeas { "disable dell yum plugin once OM is installed":
-            changes => "set /files/etc/yum/pluginconf.d/dellsysidplugin.conf/main/enabled 0",
+            changes => [
+              "set /files/etc/yum/pluginconf.d/dellsysidplugin.conf/main/enabled 0",
+              "set /files/etc/yum/pluginconf.d/dellsysid.conf/main/enabled 0"],
             require => Service["dataeng"],
             notify  => Exec["update yum cache"],
           }
@@ -52,63 +54,16 @@ class dell::openmanage {
 
 class dell::openmanage::redhat {
 
-  # le plugin yum qui nous trouve le bon build d'openmanage pour notre
-  # système.
+  $ver = "6.1"
+
   package{"firmware-addon-dell":
     ensure => latest,
   }
 
-  # workaround broken yum repository
-  $url = "http://linux.dell.com/repo/hardware/latest/pe2970/rh${lsbmajdistrelease}0/srvadmin"
-  $ver = "6.1.0-648"
-
-  package { "srvadmin-omilcore":
-    ensure => present,
-    provider => "rpm",
-    source => "${url}/srvadmin-omilcore-${ver}.i386.rpm",
-    require => [Yumrepo["dell-omsa-specific"], Package["firmware-addon-dell"]],
-  }
-
-  package { "srvadmin-deng":
-    ensure => present,
-    provider => "rpm",
-    source => "${url}/srvadmin-deng-${ver}.i386.rpm",
-    require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
+  package { ["srvadmin-base", "srvadmin-storageservices"]:
+    ensure  => present,
+    require => [Yumrepo["dell-omsa-specific"], Package["yum-dellsysid"]],
     before  => Service["dataeng"],
-  }
-
-  package { "srvadmin-omcommon":
-    ensure => present,
-    provider => "rpm",
-    source => "${url}/srvadmin-omcommon-${ver}.i386.rpm",
-    require => [Package["srvadmin-omilcore"], Package["srvadmin-syscheck"]],
-  }
-
-  package { ["srvadmin-hapi", "srvadmin-syscheck", "srvadmin-omauth"]:
-    ensure => present,
-    require => Package["srvadmin-omilcore"],
-    before  => Service["dataeng"],
-  }
-
-  package { ["srvadmin-storage", "srvadmin-omhip"]:
-    ensure => present,
-    require => Package["srvadmin-omacore"],
-    before  => Service["dataeng"],
-  }
-
-  package { "srvadmin-cm":
-    ensure => present,
-    require => [Package["srvadmin-omacore"], Package["srvadmin-syscheck"]],
-  }
-
-  package { "srvadmin-isvc":
-    ensure => present,
-    require => [Package["srvadmin-hapi"], Package["srvadmin-deng"], Package["srvadmin-syscheck"], Package["srvadmin-omacore"]],
-  }
-
-  package { "srvadmin-omacore":
-    ensure => present,
-    require => [Package["srvadmin-deng"], Package["srvadmin-omilcore"], Package["srvadmin-omcommon"]],
   }
 
   # Ce repo héberge openmanage, mais dépendent d'un plugin yum qui
@@ -117,14 +72,14 @@ class dell::openmanage::redhat {
   # http://linux.dell.com/repo/hardware/latest
   yumrepo {"dell-omsa-specific":
     descr => "Dell OMSA repository - Hardware specific",
-    mirrorlist => "http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&sys_ven_id=\$sys_ven_id&sys_dev_id=\$sys_dev_id&dellsysidpluginver=\$dellsysidpluginver",
+    mirrorlist => "http://linux.dell.com/repo/hardware/OMSA_${ver}/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&sys_ven_id=\$sys_ven_id&sys_dev_id=\$sys_dev_id&dellsysidpluginver=\$dellsysidpluginver",
     enabled => 1,
     gpgcheck => 1,
     gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-    includepkgs => "srvadmin-omilcore, srvadmin-deng, srvadmin-omauth, instsvc-drivers, srvadmin-omacore, srvadmin-odf, srvadmin-storage, srvadmin-ipmi, srvadmin-cm, srvadmin-hapi, srvadmin-isvc, srvadmin-omhip, srvadmin-syscheck",
     require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
   }
 
+  # clean up legacy repo files.
   file { ["/etc/yum.repos.d/dell-hardware-auto.repo", "/etc/yum.repos.d/dell-hardware-main.repo"]:
     ensure => absent,
   }
