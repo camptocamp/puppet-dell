@@ -56,13 +56,15 @@ class dell::openmanage::redhat {
 
   $ver = "6.1"
 
+  # this package contains the yum plugin which find the best yum repository
+  # depending on the hardware.
   package{"firmware-addon-dell":
     ensure => latest,
   }
 
   package { ["srvadmin-base", "srvadmin-storageservices"]:
     ensure  => present,
-    require => [Yumrepo["dell-omsa-specific"], Package["yum-dellsysid"]],
+    require => Yumrepo["dell-omsa-specific"],
     before  => Service["dataeng"],
   }
 
