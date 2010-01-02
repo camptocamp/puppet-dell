@@ -9,6 +9,10 @@ class dell::openmanage {
   case $isopenmanagesupported {
     yes: {
 
+      service { "dataeng":
+        ensure => running,
+      }
+
       case $operatingsystem {
         RedHat: {
 
@@ -25,10 +29,6 @@ class dell::openmanage {
               "set /files/etc/yum/pluginconf.d/dellsysid.conf/main/enabled 0"],
             require => Service["dataeng"],
             notify  => Exec["update yum cache"],
-          }
-
-          service { "dataeng":
-            ensure => running,
           }
 
         }
@@ -102,7 +102,8 @@ class dell::openmanage::debian {
   }
 
   package {"dellomsa":
-    ensure => present,
-    require => [Apt::Key["22D16719"],Exec["apt-get_update"]]
+    ensure  => present,
+    require => [Apt::Key["22D16719"],Exec["apt-get_update"]],
+    before  => Service["dataeng"],
   }
 }
