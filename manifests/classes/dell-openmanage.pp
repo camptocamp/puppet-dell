@@ -2,6 +2,8 @@ class dell::openmanage {
 
   include dell::hwtools
 
+  service { "dataeng": }
+
   # IMPORTANT: il faut tenir à jour la liste des systèmes supportés dans
   # plugins/facter/isopenmanagesupported.rb
   #
@@ -9,7 +11,7 @@ class dell::openmanage {
   case $isopenmanagesupported {
     yes: {
 
-      service { "dataeng":
+      Service["dataeng"] {
         ensure => running,
       }
 
