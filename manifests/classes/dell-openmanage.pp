@@ -15,6 +15,21 @@ class dell::openmanage {
         ensure => running,
       }
 
+      file {"/etc/logrotage.d/openmanage":
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => 0644,
+        content => "# file managed by puppet
+/var/log/TTY_*.log {
+  missingok
+  weekly
+  notifempty
+  compress
+}
+",
+      }
+
       case $operatingsystem {
         RedHat: {
 
