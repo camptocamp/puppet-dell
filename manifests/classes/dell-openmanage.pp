@@ -15,7 +15,7 @@ class dell::openmanage {
         ensure => running,
       }
 
-      file {"/etc/logrotage.d/openmanage":
+      file {"/etc/logrotate.d/openmanage":
         ensure  => present,
         owner   => root,
         group   => root,
