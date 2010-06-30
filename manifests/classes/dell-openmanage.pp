@@ -30,6 +30,10 @@ class dell::openmanage {
 ",
       }
 
+      file {"/etc/logrotate.d/perc5logs":
+        ensure  => absent,
+      }
+
       case $operatingsystem {
         RedHat: {
 
