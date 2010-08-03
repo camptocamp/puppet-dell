@@ -38,7 +38,9 @@ def fetch_page(tag)
   html
 end
 
-if Facter.value(:id) == 'root' and Facter.value(:manufacturer).match(/dell/i)
+if Facter.value(:id) == 'root' and
+   Facter.value(:virtual) == 'false' and
+   Facter.value(:manufacturer).match(/dell/i)
 
   tag = Facter.value(:serialnumber)
 
