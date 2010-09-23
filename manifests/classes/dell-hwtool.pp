@@ -39,6 +39,15 @@ class dell::hwtools {
         require => [File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]]
       }
 
+      # ensure file is managed in case we want to purge /etc/yum.repos.d/
+      # http://projects.puppetlabs.com/issues/3152
+      file { "/etc/yum.repos.d/dell-omsa-indep.repo":
+        ensure  => present,
+        mode    => 0644,
+        owner   => "root",
+        require => Yumrepo["dell-omsa-indep"],
+      }
+
       file { "/etc/yum.repos.d/dell-software-repo.repo":
         ensure => absent,
       }

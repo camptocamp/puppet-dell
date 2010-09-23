@@ -109,6 +109,16 @@ class dell::openmanage::redhat {
     require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
   }
 
+  # ensure file is managed in case we want to purge /etc/yum.repos.d/
+  # http://projects.puppetlabs.com/issues/3152
+  file { "/etc/yum.repos.d/dell-omsa-specific.repo":
+    ensure  => present,
+    mode    => 0644,
+    owner   => "root",
+    require => Yumrepo["dell-omsa-specific"],
+  }
+
+
   # clean up legacy repo files.
   file { ["/etc/yum.repos.d/dell-hardware-auto.repo", "/etc/yum.repos.d/dell-hardware-main.repo"]:
     ensure => absent,
