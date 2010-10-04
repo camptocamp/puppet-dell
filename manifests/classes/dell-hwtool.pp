@@ -12,7 +12,7 @@ class dell::hwtools {
         ensure => latest,
       }
     }
-    RedHat: {
+    /RedHat|CentOS/: {
       package{["libsmbios", "smbios-utils", "firmware-tools"]:
         ensure => latest,
       }
