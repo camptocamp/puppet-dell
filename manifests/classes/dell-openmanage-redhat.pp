@@ -1,6 +1,7 @@
 class dell::openmanage::redhat {
 
   include dell::params
+  $ver = "6.3"
 
   # this package contains the yum plugin which find the best yum repository
   # depending on the hardware.
