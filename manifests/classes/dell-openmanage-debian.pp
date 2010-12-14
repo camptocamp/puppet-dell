@@ -6,8 +6,8 @@ class dell::openmanage::debian {
 
   apt::sources_list {"dell":
     content => $lsbdistcodename ? {
-      lenny   => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-      default =>"deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n"
+      /lenny|squeeze/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
+      default         => "deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n"
     },
   }
 
