@@ -1,0 +1,44 @@
+class dell::openmanage::redhat {
+
+  include dell::params
+
+  # this package contains the yum plugin which find the best yum repository
+  # depending on the hardware.
+  package{"firmware-addon-dell":
+    ensure => latest,
+  }
+
+  package { ["srvadmin-base", "srvadmin-storageservices"]:
+    ensure  => present,
+    require => Yumrepo["dell-omsa-specific"],
+    before  => Service["dataeng"],
+  }
+
+  # Ce repo héberge openmanage, mais dépendent d'un plugin yum qui
+  # va analyser le hardware et échoue si le système n'est pas supporté.
+  #
+  # http://linux.dell.com/repo/hardware/latest
+  yumrepo {"dell-omsa-specific":
+    descr => "Dell OMSA repository - Hardware specific",
+    mirrorlist => "http://linux.dell.com/repo/hardware/OMSA_${dell::params::omsa_version}/mirrors.cgi?osname=el\$releasever&basearch=\$basearch&native=1&sys_ven_id=\$sys_ven_id&sys_dev_id=\$sys_dev_id&dellsysidpluginver=\$dellsysidpluginver",
+    enabled => 1,
+    gpgcheck => 1,
+    gpgkey => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
+    require => [Package["firmware-addon-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"], File["/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"]],
+  }
+
+  # ensure file is managed in case we want to purge /etc/yum.repos.d/
+  # http://projects.puppetlabs.com/issues/3152
+  file { "/etc/yum.repos.d/dell-omsa-specific.repo":
+    ensure  => present,
+    mode    => 0644,
+    owner   => "root",
+    require => Yumrepo["dell-omsa-specific"],
+  }
+
+  # clean up legacy repo files.
+  file { ["/etc/yum.repos.d/dell-hardware-auto.repo", "/etc/yum.repos.d/dell-hardware-main.repo"]:
+    ensure => absent,
+  }
+
+}
