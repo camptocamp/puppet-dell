@@ -12,7 +12,8 @@ class dell::openmanage {
     yes: {
 
       Service["dataeng"] {
-        ensure => running,
+        ensure    => running,
+        hasstatus => true,
       }
 
       file {"/etc/logrotate.d/openmanage":
