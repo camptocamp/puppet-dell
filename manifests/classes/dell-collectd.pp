@@ -22,7 +22,7 @@ Usage:
 */
 class dell::collectd {
 
-  if $operatingsystem == "RedHat" and $lsbmajdistrelease > "4" {
+  if $operatingsystem =~ /RedHat|CentOS/ and $lsbmajdistrelease > "4" {
 
     if !defined(Package["collectd-snmp"]) {
       package { "collectd-snmp":

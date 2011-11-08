@@ -42,7 +42,7 @@ class dell::openmanage {
       }
 
       case $operatingsystem {
-        RedHat: {
+        /RedHat|CentOS/: {
 
           # openmanage is a mess to install on redhat, and recent versions
           # don't support older hardware. So puppet will install it if absent,
@@ -79,4 +79,3 @@ class dell::openmanage {
     }
   }
 }
-
