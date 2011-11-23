@@ -20,13 +20,13 @@ class dell::hwtools {
 
       file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-dell":
         ensure => present,
-        source => "puppet:///dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
+        source => "puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
         mode   => 644,
       }
 
       file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios":
         ensure => present,
-        source => "puppet:///dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
+        source => "puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
         mode   => 644,
       }
 
