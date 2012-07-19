@@ -15,7 +15,7 @@ Facter.add("isopenmanagesupported") do
     setcode do
 
         if FileTest.exists?("/usr/sbin/getSystemId")
-            output = %x{/usr/sbin/getSystemId}
+            output = %x{/usr/sbin/getSystemId 2>/dev/null}
             systemid = /^System ID:\s+(.*)$/.match(output)
 
             if systemid.nil? or systemid.length != 2
