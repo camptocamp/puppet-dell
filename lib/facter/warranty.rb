@@ -1,12 +1,13 @@
 if Facter.value(:id) == 'root' and
    Facter.value(:virtual) == 'physical' and
-   Facter.value(:manufacturer).match(/dell/i)
+   Facter.value(:manufacturer).match(/dell/i) and
+   File.exists?('/usr/local/sbin/check_dell_warranty.py')
 
   tag = Facter.value(:serialnumber)
   cache = "/var/tmp/dell-warranty-#{tag}.fact"
   output = nil
 
-  if File.exists?(cache) and Time.now < File.stat(cache).mtime + 86400
+  if File.size(cache) > 1 and Time.now < File.stat(cache).mtime + 86400
     file = File.new(cache, "r")
     output = file.read
     file.close
