@@ -18,8 +18,8 @@ if Facter.value(:id) == 'root' and
       file.close
     end
   end
-   
-  regex = Regexp.new('.*Start: (\d{4}-\d{2}-\d{2}).*End: (\d{4}-\d{2}-\d{2}).*Days left: (\d+)')
+
+  regex = Regexp.new('Start:\s(\d{4}-\d{2}-\d{2}),\sEnd:\s(\d{4}-\d{2}-\d{2}),\sDays left:\s(-?\d+)') 
   warranty = output.match(regex)
 
   if warranty and warranty.length == 4
