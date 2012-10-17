@@ -1,11 +1,13 @@
 if Facter.value(:id) == 'root' and
-   File.exists?('/usr/local/sbin/check_dell_warranty.py')
-
+   Facter.value(:virtual) == 'physical' and
+   !Facter.value(:manufacturer).nil? and
+   Facter.value(:manufacturer).match(/dell/i)
+  
   tag = Facter.value(:serialnumber)
   cache = "/var/tmp/dell-warranty-#{tag}.fact"
   output = nil
 
-  if File.size(cache) > 1 and Time.now < File.stat(cache).mtime + 86400
+  if File.exists?(cache) and Time.now < File.stat(cache).mtime + 86400
     file = File.new(cache, "r")
     output = file.read
     file.close
@@ -17,33 +19,29 @@ if Facter.value(:id) == 'root' and
       file.close
     end
   end
-
-  regex = Regexp.new('Start:\s(\d{4}-\d{2}-\d{2}),\sEnd:\s(\d{4}-\d{2}-\d{2}),\sDays left:\s(-?\d+)') 
+  
+  regex = Regexp.new('Start:\s(\d{4}-\d{2}-\d{2}),\sEnd:\s(\d{4}-\d{2}-\d{2}),\sDays left:\s(-?\d+)')
   warranty = output.match(regex)
-
+  
   if warranty and warranty.length == 4
 
-    Facter.add('warranty_start') do
-      confine :virtual => "physical"
-      confine :manufacturer => "Dell Inc."
+    Facter.add('n_warranty_start') do
       setcode do
         warranty[1]
       end
     end
-
-    Facter.add('warranty_end') do
-      confine :virtual => "physical"
-      confine :manufacturer => "Dell Inc."
+    
+    Facter.add('n_warranty_end') do
       setcode do
         warranty[2]
       end
     end
-
-    Facter.add('warranty_days_left') do
+    
+    Facter.add('n_warranty_days_left') do
       setcode do
         warranty[3]
       end
     end
-
+  
   end
 end
