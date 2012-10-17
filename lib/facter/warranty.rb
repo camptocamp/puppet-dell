@@ -25,19 +25,19 @@ if Facter.value(:id) == 'root' and
   
   if warranty and warranty.length == 4
 
-    Facter.add('n_warranty_start') do
+    Facter.add('warranty_start') do
       setcode do
         warranty[1]
       end
     end
     
-    Facter.add('n_warranty_end') do
+    Facter.add('warranty_end') do
       setcode do
         warranty[2]
       end
     end
     
-    Facter.add('n_warranty_days_left') do
+    Facter.add('warranty_days_left') do
       setcode do
         warranty[3]
       end
