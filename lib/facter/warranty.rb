@@ -1,6 +1,4 @@
 if Facter.value(:id) == 'root' and
-   Facter.value(:virtual) == 'physical' and
-   Facter.value(:manufacturer).match(/dell/i) and
    File.exists?('/usr/local/sbin/check_dell_warranty.py')
 
   tag = Facter.value(:serialnumber)
@@ -26,12 +24,16 @@ if Facter.value(:id) == 'root' and
   if warranty and warranty.length == 4
 
     Facter.add('warranty_start') do
+      confine :virtual => "physical"
+      confine :manufacturer => "Dell Inc."
       setcode do
         warranty[1]
       end
     end
 
     Facter.add('warranty_end') do
+      confine :virtual => "physical"
+      confine :manufacturer => "Dell Inc."
       setcode do
         warranty[2]
       end
