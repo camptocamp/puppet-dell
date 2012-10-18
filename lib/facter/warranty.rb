@@ -1,5 +1,5 @@
 if Facter.value(:id) == 'root' and
-   Facter.value(:virtual) == 'physical' and
+   Facter.value(:is_virtual) == 'false' and
    !Facter.value(:manufacturer).nil? and
    Facter.value(:manufacturer).match(/dell/i)
   
@@ -7,7 +7,7 @@ if Facter.value(:id) == 'root' and
   cache = "/var/tmp/dell-warranty-#{tag}.fact"
   output = nil
 
-  if File.exists?(cache) and Time.now < File.stat(cache).mtime + 86400
+  if File.exists?(cache) and File.size(cache) > 1 and Time.now < File.stat(cache).mtime + 86400
     file = File.new(cache, "r")
     output = file.read
     file.close
