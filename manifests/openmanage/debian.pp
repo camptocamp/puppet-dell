@@ -33,11 +33,23 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
+  $omsa  = "deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n"
+  $omsa6 = "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n"
+
+  case $lsbdistid {
+    Ubuntu: {
+      $content = $omsa6
+    }
+    Debian: {
+      $content = $lsbdistcodename ? {
+        /lenny|squeeze/ => $omsa6,
+        default         => $omsa
+      }
+    }
+  }
+
   apt::sources_list {"dell":
-    content => $lsbdistcodename ? {
-      /lenny|squeeze/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-      default         => "deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n"
-    },
+    content => $content
   }
 
   package {"dellomsa":
