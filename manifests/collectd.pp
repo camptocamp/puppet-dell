@@ -11,7 +11,7 @@ Note: some power values actually represent current (Ampers) but are displayed
 as Watts.
 
 Requires:
-- Class["collectd"]
+- Class['collectd']
 
 Usage:
   include collectd
@@ -22,21 +22,23 @@ Usage:
 */
 class dell::collectd {
 
-  if $operatingsystem =~ /RedHat|CentOS/ and $lsbmajdistrelease > "4" {
+  if $::operatingsystem =~ /RedHat|CentOS/ and $::lsbmajdistrelease > '4' {
 
-    if !defined(Package["collectd-snmp"]) {
-      package { "collectd-snmp":
+    if !defined(Package['collectd-snmp']) {
+      package { 'collectd-snmp':
         ensure => present,
-        before => File["/var/lib/puppet/modules/collectd/plugins/dell.conf"],
+        before => File['/var/lib/puppet/modules/collectd/plugins/dell.conf'],
       }
     }
   }
 
-  file { "/var/lib/puppet/modules/collectd/plugins/dell.conf":
-    content => template("dell/collectd.conf"),
-    mode => 0644, owner => root, group => 0,
+  file { '/var/lib/puppet/modules/collectd/plugins/dell.conf':
+    content => template('dell/collectd.conf'),
+    mode    => '0644',
+    owner   => root,
+    group   => 0,
     notify  => Service['collectd'],
-    require => Class["dell::snmp"],
+    require => Class['dell::snmp'],
   }
 
 }
