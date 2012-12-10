@@ -57,7 +57,6 @@ class dell::openmanage {
               "set /files/etc/yum/pluginconf.d/dellsysidplugin.conf/main/enabled 0",
               "set /files/etc/yum/pluginconf.d/dellsysid.conf/main/enabled 0"],
             require => Service["dataeng"],
-            notify  => Exec["update yum cache"],
           }
 
         }
