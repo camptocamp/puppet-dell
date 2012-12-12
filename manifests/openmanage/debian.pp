@@ -1,5 +1,5 @@
 class dell::openmanage::debian {
-  apt::key {"22D16719":
+  apt::key {'22D16719':
     ensure  => present,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)
@@ -33,16 +33,18 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::sources_list {"dell":
-    content => $lsbdistcodename ? {
-      /lenny|squeeze/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-      default         => "deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n"
-    },
+  $sources_list_content = $::lsbdistcodename ? {
+    /lenny|squeeze/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
+    default         => "deb ftp://ftp.sara.nl/pub/sara-omsa dell sara\n",
   }
 
-  package {"dellomsa":
+  apt::sources_list {'dell':
+    content => $sources_list_content,
+  }
+
+  package {'dellomsa':
     ensure  => present,
-    require => [Apt::Key["22D16719"],Exec["apt-get_update"]],
-    before  => Service["dataeng"],
+    require => [Apt::Key['22D16719'],Exec['apt-get_update']],
+    before  => Service['dataeng'],
   }
 }
