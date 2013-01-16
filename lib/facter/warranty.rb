@@ -1,7 +1,10 @@
+check_script = '/usr/local/sbin/check_dell_warranty.py'
+
 if Facter.value(:id) == 'root' and
    Facter.value(:is_virtual) == 'false' and
    !Facter.value(:manufacturer).nil? and
-   Facter.value(:manufacturer).match(/dell/i)
+   Facter.value(:manufacturer).match(/dell/i) and
+   File.exist?(check_script)
   
   tag = Facter.value(:serialnumber)
   cache = "/var/tmp/dell-warranty-#{tag}.fact"
@@ -12,7 +15,7 @@ if Facter.value(:id) == 'root' and
     output = file.read
     file.close
   else
-    output = IO.popen("/usr/local/sbin/check_dell_warranty.py -s #{tag}").read
+    output = IO.popen("#{check_script} -s #{tag}").read
     if output
       file = File.new(cache, "w")
       file.puts output
