@@ -1,3 +1,8 @@
+#
+# == Class: dell::openmanage
+#
+# Install openmanage tools
+#
 class dell::openmanage {
 
   include dell::hwtools

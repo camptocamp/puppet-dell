@@ -1,3 +1,8 @@
+#
+# == Class: dell::openmanage::debian
+#
+# Install openmanage tools on Debian
+#
 class dell::openmanage::debian {
   apt::key {'22D16719':
     ensure  => present,

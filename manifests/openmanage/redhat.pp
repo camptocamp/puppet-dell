@@ -1,3 +1,8 @@
+#
+# == Class: dell::openmanage::redhat
+#
+# Install openmanage tools on RedHat
+#
 class dell::openmanage::redhat {
 
   include dell::params

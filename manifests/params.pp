@@ -1,3 +1,9 @@
+#
+# == Class: dell::params
+#
+# Parameters
+# TODO: use parameterized classes
+#
 class dell::params {
 
   $omsa_url_base = $dell_omsa_url_base ? {

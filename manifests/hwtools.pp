@@ -1,3 +1,8 @@
+#
+# == Class: dell::hwtools
+#
+# Install hardware tools
+#
 class dell::hwtools {
 
   include dell::params
