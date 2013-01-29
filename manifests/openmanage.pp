@@ -48,9 +48,7 @@ class dell::openmanage {
           # openmanage is a mess to install on redhat, and recent versions
           # don't support older hardware. So puppet will install it if absent,
           # or else leave it unmanaged.
-          if $::srvadminpkgcount < 10 {
-            include dell::openmanage::redhat
-          }
+          include dell::openmanage::redhat
 
           augeas { 'disable dell yum plugin once OM is installed':
             changes => [
