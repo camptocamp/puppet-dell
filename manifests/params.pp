@@ -6,19 +6,33 @@
 #
 class dell::params {
 
-  $omsa_url_base = $::dell_omsa_url_base ? {
-    ''      => 'http://linux.dell.com/repo/hardware/',
-    default => $::dell_omsa_url_base,
-  }
+  case $::osfamily {
 
-  $omsa_url_args_indep = $::dell_omsa_url_args_indep ? {
-    ''      => 'osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver',
-    default => $::dell_omsa_url_args_indep,
-  }
+    'RedHat': {
+      $omsa_url_base = $::dell_omsa_url_base ? {
+        ''      => 'http://linux.dell.com/repo/hardware/',
+        default => $::dell_omsa_url_base,
+      }
 
-  $omsa_url_args_specific = $::dell_omsa_url_args_specific ? {
-    ''      => 'osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver',
-    default => $::dell_omsa_url_args_specific,
+      $omsa_url_args_indep = $::dell_omsa_url_args_indep ? {
+        ''      => 'osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver',
+        default => $::dell_omsa_url_args_indep,
+      }
+
+      $omsa_url_args_specific = $::dell_omsa_url_args_specific ? {
+        ''      => 'osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver',
+        default => $::dell_omsa_url_args_specific,
+      }
+    }
+
+    'Debian': {
+      $omsa_url_base = $::dell_omsa_url_base ? {
+        ''      => 'http://linux.dell.com/repo/community/deb/',
+        default => $::dell_omsa_url_base,
+      }
+    }
+
+    default:  { fail("Unsupported OS family: ${::osfamily}") }
   }
 
   $omsa_version = $::dell_omsa_version ? {
