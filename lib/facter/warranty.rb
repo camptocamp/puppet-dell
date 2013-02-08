@@ -15,8 +15,10 @@ if Facter.value(:id) == 'root' and
     output = file.read
     file.close
   else
-    output = IO.popen("#{check_script} -s #{tag}").read
-    if output
+    cmd = IO.popen("#{check_script} -s #{tag}")
+    output = cmd.read
+    cmd.close
+    if $?.exitstatus.to_i == 0
       file = File.new(cache, "w")
       file.puts output
       file.close
