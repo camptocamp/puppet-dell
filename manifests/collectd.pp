@@ -22,23 +22,24 @@ Usage:
 */
 class dell::collectd {
 
-  if $::operatingsystem =~ /RedHat|CentOS/ and $::lsbmajdistrelease > '4' {
-
-    if !defined(Package['collectd-snmp']) {
-      package { 'collectd-snmp':
-        ensure => present,
-        before => File['/var/lib/puppet/modules/collectd/plugins/dell.conf'],
-      }
+  if $::collectd_version { # trick to check which collectd module we are using
+    collectd::config::plugin { 'monitor dell snmp':
+      plugin   => 'snmp',
+      settings => template('dell/collectd.conf'),
+      require  => Class['dell::snmp'],
+    }
+  } else {
+    file { '/var/lib/puppet/modules/collectd/plugins/dell.conf':
+      content => template(
+        'dell/collectd-header.conf',
+        'dell/collectd.conf',
+        'dell/collectd-footer.conf'
+      ),
+      mode    => '0644',
+      owner   => root,
+      group   => 0,
+      notify  => Service['collectd'],
+      require => Class['dell::snmp'],
     }
   }
-
-  file { '/var/lib/puppet/modules/collectd/plugins/dell.conf':
-    content => template('dell/collectd.conf'),
-    mode    => '0644',
-    owner   => root,
-    group   => 0,
-    notify  => Service['collectd'],
-    require => Class['dell::snmp'],
-  }
-
 }
