@@ -20,4 +20,14 @@ class dell::params {
     default => $dell_omsa_version,
   }
 
+  $customplugins = $dell_customplugins ? {
+         '' => '/usr/local/src',
+    default => $dell_customplugins,
+  }
+
+  $check_warranty_revision = $dell_check_warranty_revision ? {
+    ''      => '42d157c57b1247e651021098b278adf14e468805',
+    default => $dell_check_warranty_revision,
+  }
+
 }
