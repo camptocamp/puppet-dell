@@ -20,4 +20,9 @@ class dell::params {
     default => $dell_omsa_version,
   }
 
+  $customplugins = $dell_customplugins ? {
+         '' => '/usr/local/src',
+    default => $dell_customplugins,
+  }
+
 }
