@@ -22,8 +22,17 @@ class dell::params {
   }
 
   $omsa_version = $dell_omsa_version ? {
-    ''      => 'latest',
-    default => "OMSA_$dell_omsa_version",
+          '' => $::productname ? {
+               'PowerEdge 1750' => 'OMSA_6.1',
+               'PowerEdge 1850' => 'OMSA_5.5',
+               'PowerEdge 1950' => 'OMSA_6.1',
+               'PowerEdge 2950' => 'OMSA_5.4',
+               'PowerEdge R610' => 'OMSA_6.4',
+               'PowerEdge R620' => 'OMSA_7.2',
+                        default => 'OMSA_5.4',
+             },
+    'latest' => 'latest',
+    default  => "OMSA_$dell_omsa_version",
   }
 
   $customplugins = $dell_customplugins ? {
