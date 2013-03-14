@@ -52,4 +52,26 @@ class dell::openmanage::redhat {
     ensure => absent,
   }
 
+  # Patch for RHEL6.4, waiting for new OMSA release
+  # See http://lists.us.dell.com/pipermail/linux-poweredge/2013-March/047794.html
+  # This file is a kind a merge between /etc/init.d/ipmi (provided by OpenIPMI)
+  # and /etc/init.d/dsm_sa_ipmi (provided by OMSA 7.2)
+  case $::lsbdistrelease {
+
+    '6.4': {
+      file { '/etc/init.d/dsm_sa_ipmi':
+        ensure  => present,
+        source  => "puppet:///modules/dell/etc/init.d/dsm_sa_ipmi.${::osfamily}.${::lsbdistrelease}",
+        mode    => '0755',
+        seluser => 'system_u',
+        selrole => 'object_r',
+        seltype => 'initrc_exec_t',
+        before  => [ Service['dataeng'] ],
+      }
+    }
+
+    default: {}
+
+  }
+
 }
