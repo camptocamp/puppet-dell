@@ -12,8 +12,7 @@ class dell::hwtools {
 
   case $::operatingsystem {
     Debian: {
-      #TODO
-      package {'libsmbios-bin':
+      package { "${::dell::params::smbios_pkg}":
         ensure => latest,
       }
     }
