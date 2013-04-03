@@ -114,7 +114,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   $sources_list_content = $::lsbdistcodename ? {
     /lenny/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-    default => "deb ${::dell::params::omsa_url_base}${::dell::params::omsa_version}/\n",
+    default => "deb ${::dell::params::omsa_url_base}${::dell::params::omsa_version} /\n",
   }
 
   $omsa_pkg_name = $::lsbdistcodename ? {
