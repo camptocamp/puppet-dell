@@ -45,7 +45,7 @@ class dell::params {
             'PowerEdge 1750' => 'OMSA_6.1',
             'PowerEdge 1850' => 'OMSA_5.5',
             'PowerEdge 1950' => 'OMSA_6.1',
-            'PowerEdge 2950' => 'OMSA_5.4',
+            'PowerEdge 2950' => 'OMSA_6.4',
             'PowerEdge R610' => 'OMSA_6.4',
             'PowerEdge R620' => 'OMSA_7.2',
             default          => 'OMSA_5.4',
