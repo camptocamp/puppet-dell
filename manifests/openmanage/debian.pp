@@ -5,6 +5,23 @@
 #
 class dell::openmanage::debian {
 
+  # key of:
+  # http://linux.dell.com/repo/community/deb/OMSA_7.0/ (same for 7.1)
+  # necessary for 6.5
+  $key_34D8786F=$::dell::params::omsa_version?{
+    'OMSA_6.5' => 'present',
+    'OMSA_7.0' => 'present',
+    'OMSA_7.1' => 'present',
+    default    => 'absent',
+  }
+
+  # key of:
+  # http://linux.dell.com/repo/community/deb/OMSA_6.5/
+  $key_5E3D7775=$::dell::params::omsa_version?{
+    'OMSA_6.5' => 'present',
+    default    => 'absent',
+  }
+
   apt::key {'22D16719':
     ensure  => present,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -39,8 +56,44 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
+  apt::key { '5E3D7775':
+    ensure  => $key_5E3D7775,
+    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+mQGiBELSl68RBACDhWn3X8Ls6mvdpgmPaDqSMVH2GjfWp7Zwto21cFCa8uBDvCSv
+bzta922bBDYny1rJNBWOlniI4VaMLPkvUzznYm2rf/f+fuTC6FTQd4yi7VP8X8vp
+V7BKlQDMln3CuZcI1ajFMS1pp1551IRkcskZ6sGgWv5BHjyNWxbp481+2wCglK21
++zR5H34O2kShFGLJxBWp8x0D/2rFQk8JIAIyY7ikkBDtPBGfJHGOwych4fVJJnVq
+Fz9JqHAYZ3P+WO3sMG5nHkhx8IekOGk+TGbdfYwuGBCuFDkY8UY9fyC+NIGBHF3z
+mKpWpBu5mwATLeZhYbEhnItxZ7yq8w59LHCeZBbwwfG/6KKaxhgCoK1toSi+1lHL
+ItRQA/43mWKyVW6fZkmDZcOfRRIOjfKCbk8g+3P2msPkBtsZtbA7ANMk7MgPFBur
+JHcCjUekOfR4TN/xQ0sl85kec8hIW3ygCyvc3bO8IsdOMOJO40MoYfNI9nFuWqg2
+rL63TrnyMw4/uzV5bNwAZUopXftD+dPuQ6+8Y/l6b7X6po6V5LRfbGlic21iaW9z
+IChUaGlzIGtleSBpcyB1c2VkIHRvIHNpZ24gYWxsIGxpYnNtYmlvcyB0YXJiYWxs
+cykgPGxpYnNtYmlvcy1kZXZlbEBsaXN0cy51cy5kZWxsLmNvbT6IRgQTEQIABgUC
+QtKbrAAKCRAhq+73kvD8Cee1AJ9OWTcp1m9PDpWWbYVchN9HapkdQACeIXp03IdH
+MyyNjUAmCkIKNQd4hmWIRgQTEQIABgUCQtKb8QAKCRDKd5UdI7ZqnSX6AJ44cDQr
+niqdq8YP2z4/7Rw81+TB6wCcC+FktNeZA3jyqqrD//pL7s0Yh3yISQQQEQIACQUC
+Rk56GgIHAAAKCRBydbwZ0AUP5XnUAJ9KgT0Habbqyu/5s2Go7IOvDq97PACfbeP8
+NILIPiNW6wNfclnfqHRmXt6IWwQTEQIAGwUCQtKXrwYLCQgHAwIDFQIDAxYCAQIe
+AQIXgAAKCRDnRDPiXj13dU3RAJ9CgkwbJ/SUDoHZT6RP55iFuszt6wCfYVTyntyO
+/1NGnKxo33m2WXq+WRmIWwQTEQIAGwUCQtKXrwYLCQgHAwIDFQIDAxYCAQIeAQIX
+gAAKCRDnRDPiXj13dU3RAJ9SG7Rmvp55cLNSQf3Lwd50JCfTrACeK9KRrobo5ouU
+byv9nmK9LF3mRpe5AQ0EQtKXsBAEAKQL5zlThVPRuBs6yQ4TYPIx7cY+Fnw/xp0F
+/ltLgWuldmejeMbgkMrUS9d6JzNVfuSBtZCNZz+rYKOm0wTBgqef/1xe1jJv7ML4
+7eh2gXvSiwTctvfwOMuL6rFisruq/hCQdFofLK4oovfn5B06Q8b66CDytwRRfzQO
+7Ohe6EAbAAMFBACd5c0GvGe6o2/iNbs9fNNXSc0SK7Yrax1thgLRNMZPPis+csmd
+McgmygbICaiFUI0lgUtq5hGVnahd9fCsYME0uH5cPRfAPWQgukLKyKu3qjCQJ8Cn
+D2uwIMvPfiwk4qKWt/fNwYaMx+xs6PKbb7pj9euvC+K4aXVmc3h1YtzKnYhGBBgR
+AgAGBQJC0pewAAoJEOdEM+JePXd1yeoAn3DKaapBZNXQ/iPKwaaC9jkfzAANAJ0X
+QanLpjDk1ri9fzZiUU+cSuIl3A==
+=uvK/
+-----END PGP PUBLIC KEY BLOCK-----',
+  }
+
   apt::key { '34D8786F':
-    ensure  => present,
+    ensure  => $key_34D8786F,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
