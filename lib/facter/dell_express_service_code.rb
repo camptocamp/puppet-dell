@@ -1,4 +1,4 @@
-Facter.add('dell_expressservicecode') do
+Facter.add('dell_express_service_code') do
   confine :id => 'root'
   confine :is_virtual => 'false'
   if !Facter.value(:manufacturer).nil? and Facter.value(:manufacturer).match(/dell/i)
