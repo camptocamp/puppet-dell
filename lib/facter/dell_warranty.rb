@@ -1,4 +1,4 @@
-Facter.add('warranty_days_left') do
+Facter.add('dell_warranty_days_left') do
   confine :id => 'root'
   confine :is_virtual => 'false'
 
@@ -32,13 +32,13 @@ Facter.add('warranty_days_left') do
 
     if warranty and warranty.length == 4
 
-      Facter.add('warranty_start') do
+      Facter.add('dell_warranty_start') do
         setcode do
           warranty[1]
         end
       end
 
-      Facter.add('warranty_end') do
+      Facter.add('dell_warranty_end') do
         setcode do
           warranty[2]
         end
