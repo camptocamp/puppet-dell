@@ -57,7 +57,17 @@ class dell::openmanage {
     }
 
     Debian: {
-      include dell::openmanage::debian
+        include dell::openmanage::debian
+        package{'srvadmin-iws':
+            ensure => present,
+            notify => Service['dsm_om_connsvc'],
+        }
+
+        service { 'dsm_om_connsvc':
+            ensure    => running,
+            hasstatus => true,
+        }
+  }
     }
 
     default: {
