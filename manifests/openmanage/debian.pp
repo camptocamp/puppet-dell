@@ -6,6 +6,9 @@
 class dell::openmanage::debian {
 
   include apt
+  Package{
+    require => Apt::Souces_list['dell'],
+  }
 
   # key of:
   # http://linux.dell.com/repo/community/deb/OMSA_7.0/ (same for 7.1)
@@ -179,7 +182,6 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   apt::sources_list {'dell':
     content => $sources_list_content,
-    before => Package["$omsa_pkg_name"],
   }
 
   package { $omsa_pkg_name:
