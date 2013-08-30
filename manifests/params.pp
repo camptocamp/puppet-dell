@@ -3,6 +3,7 @@
 #
 # Parameters
 # TODO: use parameterized classes
+# TODO: remove lenny and refactor this
 #
 class dell::params {
 
@@ -26,9 +27,21 @@ class dell::params {
     }
 
     'Debian': {
-      $omsa_url_base = $dell_omsa_url_base ? {
-        ''      => 'http://linux.dell.com/repo/community/deb/',
-        default => $dell_omsa_url_base,
+      case $::lsbmajdistrelease {
+
+        '7': {
+          $omsa_url_base = $dell_omsa_url_base ? {
+            ''      => 'http://linux.dell.com/repo/community/debian/',
+            default => $dell_omsa_url_base,
+          }
+        }
+
+        default: {
+            $omsa_url_base = $dell_omsa_url_base ? {
+              ''      => 'http://linux.dell.com/repo/community/deb/',
+              default => $dell_omsa_url_base,
+            }
+          }  
       }
 
       $smbios_pkg = $::lsbdistcodename ? {
@@ -51,6 +64,7 @@ class dell::params {
             'PowerEdge R410' => 'OMSA_6.4',
             'PowerEdge R510' => 'OMSA_6.4',
             'PowerEdge R610' => 'OMSA_6.4',
+            'PowerEdge T320' => '',
             'PowerEdge R620' => 'OMSA_7.2',
             default          => 'OMSA_5.4',
     },
