@@ -13,6 +13,7 @@ class dell::openmanage::debian {
     'OMSA_7.0' => 'present',
     'OMSA_7.1' => 'present',
     'latest'   => 'present',
+            '' => 'present',
     default    => 'absent',
   }
 
@@ -168,12 +169,14 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   $sources_list_content = $::lsbdistcodename ? {
     /lenny/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-    default => "deb ${::dell::params::omsa_url_base}${::dell::params::omsa_version} /\n",
+  /squeeze/ => "deb ${::dell::params::omsa_url_base}${::dell::params::omsa_version} /\n",
+   default  => "deb http://linux.dell.com/repo/community/debian ${::lsbdistcodename} openmanage",
   }
 
   $omsa_pkg_name = $::lsbdistcodename ? {
     /lenny/ => 'dellomsa',
-    default => [ 'srvadmin-base', 'srvadmin-storageservices' ],
+  /squeeze/ => [ 'srvadmin-base', 'srvadmin-storageservices' ],
+    default => [ 'srvadmin-base', 'srvadmin-storageservices', 'srvadmin-omcommon' ],
   }
 
   apt::sources_list {'dell':
