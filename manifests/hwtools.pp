@@ -12,6 +12,17 @@ class dell::hwtools {
 
   case $::operatingsystem {
     Debian: {
+
+      # It's OK to install unsigned packages
+      file { "/etc/apt/apt.conf.d/99auth":       
+         owner     => root,
+         group     => root,
+         content   => "#Cette option est activée pour l'installation de DeLL OMSA
+APT::Get::AllowUnauthenticated yes;",
+         mode      => 644,
+        before  => Package["${::dell::params::smbios_pkg}"],
+      }
+
       package { "${::dell::params::smbios_pkg}":
         ensure => latest,
       }
