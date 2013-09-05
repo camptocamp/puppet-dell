@@ -5,7 +5,7 @@
 #
 class dell::openmanage {
 
-  include dell::hwtools
+  include ::dell::hwtools
 
   service { 'dataeng':
     ensure    => running,
@@ -44,7 +44,7 @@ class dell::openmanage {
       # openmanage is a mess to install on redhat, and recent versions
       # don't support older hardware. So puppet will install it if absent,
       # or else leave it unmanaged.
-      include dell::openmanage::redhat
+      include ::dell::openmanage::redhat
 
       augeas { 'disable dell yum plugin once OM is installed':
         changes => [
@@ -57,11 +57,11 @@ class dell::openmanage {
     }
 
     Debian: {
-      include dell::openmanage::debian
+      include ::dell::openmanage::debian
     }
 
     default: {
-      err("Unsupported operatingsystem: $::operatingsystem.")
+      err("Unsupported operatingsystem: ${::operatingsystem}.")
     }
 
   }
