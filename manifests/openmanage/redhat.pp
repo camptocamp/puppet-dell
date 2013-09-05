@@ -5,7 +5,9 @@
 #
 class dell::openmanage::redhat {
 
-  include dell::params
+  if (!defined(Class['dell'])) {
+    fail 'You need to declare class dell'
+  }
 
   # this package contains the yum plugin which find the best yum repository
   # depending on the hardware.
@@ -25,7 +27,7 @@ class dell::openmanage::redhat {
   # http://linux.dell.com/repo/hardware/latest
   yumrepo {'dell-omsa-specific':
     descr      => 'Dell OMSA repository - Hardware specific',
-    mirrorlist => "${::dell::params::omsa_url_base}${::dell::params::omsa_version}/mirrors.cgi?${::dell::params::omsa_url_args_specific}",
+    mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_specific}",
     enabled    => 1,
     gpgcheck   => 1,
     gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",

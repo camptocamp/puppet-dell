@@ -8,25 +8,27 @@
 #
 class dell::warranty {
 
-  include dell::params
-
-  vcsrepo { "$::dell::params::customplugins/dell_warranty":
-    ensure   => present,
-    provider => git,
-    source   => "https://git.gitorious.org/smarmy/check_dell_warranty.git",
-    revision => "$::dell::params::check_warranty_revision",
+  if (!defined(Class['dell'])) {
+    fail 'You need to declare class dell'
   }
 
-  file { "$::dell::params::customplugins/dell_warranty/check_dell_warranty.py":
+  vcsrepo { "${dell::customplugins}/dell_warranty":
+    ensure   => present,
+    provider => git,
+    source   => 'https://git.gitorious.org/smarmy/check_dell_warranty.git',
+    revision => $dell::check_warranty_revision,
+  }
+
+  file { "${dell::customplugins}/dell_warranty/check_dell_warranty.py":
     ensure  => present,
-    mode    => 0755,
-    require => Vcsrepo[ "$::dell::params::customplugins/dell_warranty" ],
+    mode    => '0755',
+    require => Vcsrepo[ "${dell::customplugins}/dell_warranty" ],
   }
 
   file { '/usr/local/sbin/check_dell_warranty.py':
     ensure  => link,
-    target  => "$::dell::params::customplugins/dell_warranty/check_dell_warranty.py",
-    require => File["$::dell::params::customplugins/dell_warranty/check_dell_warranty.py"],
+    target  => "${dell::customplugins}/dell_warranty/check_dell_warranty.py",
+    require => File["${dell::customplugins}/dell_warranty/check_dell_warranty.py"],
   }
 
 }

@@ -5,21 +5,25 @@
 #
 class dell::openmanage::debian {
 
+  if (!defined(Class['dell'])) {
+    fail 'You need to declare class dell'
+  }
+
   # key of:
   # http://linux.dell.com/repo/community/deb/OMSA_7.0/ (same for 7.1)
   # necessary for 6.5
-  $key_34D8786F=$::dell::params::omsa_version?{
+  $key_34D8786F = $dell::omsa_version ? {
     'OMSA_6.5' => 'present',
     'OMSA_7.0' => 'present',
     'OMSA_7.1' => 'present',
     'latest'   => 'present',
-            '' => 'present',
+    ''         => 'present',
     default    => 'absent',
   }
 
   # key of:
   # http://linux.dell.com/repo/community/deb/OMSA_6.5/
-  $key_5E3D7775=$::dell::params::omsa_version?{
+  $key_5E3D7775 = $dell::omsa_version ? {
     'OMSA_6.5' => 'present',
     default    => 'absent',
   }
@@ -168,15 +172,15 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
   }
 
   $sources_list_content = $::lsbdistcodename ? {
-    /lenny/ => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-  /squeeze/ => "deb ${::dell::params::omsa_url_base}${::dell::params::omsa_version} /\n",
-   default  => "deb http://linux.dell.com/repo/community/debian ${::lsbdistcodename} openmanage",
+    'lenny'   => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
+    'squeeze' => "deb ${dell::omsa_url_base}${dell::omsa_version} /\n",
+    default   => "deb http://linux.dell.com/repo/community/debian ${::lsbdistcodename} openmanage",
   }
 
   $omsa_pkg_name = $::lsbdistcodename ? {
-    /lenny/ => 'dellomsa',
-  /squeeze/ => [ 'srvadmin-base', 'srvadmin-storageservices' ],
-    default => [ 'srvadmin-base', 'srvadmin-storageservices', 'srvadmin-omcommon' ],
+    'lenny'   => 'dellomsa',
+    'squeeze' => [ 'srvadmin-base', 'srvadmin-storageservices' ],
+    default   => [ 'srvadmin-base', 'srvadmin-storageservices', 'srvadmin-omcommon' ],
   }
 
   apt::sources_list {'dell':

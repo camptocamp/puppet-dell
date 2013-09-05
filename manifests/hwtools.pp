@@ -5,7 +5,11 @@
 #
 class dell::hwtools {
 
-  include dell::params
+  if (!defined(Class['dell'])) {
+    fail 'You need to declare class dell'
+  }
+
+  include ::dell::params
 
   # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
   # bios & firmwares.
@@ -36,7 +40,7 @@ class dell::hwtools {
       # http://linux.dell.com/wiki/index.php/Repository/software
       yumrepo {'dell-omsa-indep':
         descr      => 'Dell OMSA repository - Hardware independent',
-        mirrorlist => "${::dell::params::omsa_url_base}${::dell::params::omsa_version}/mirrors.cgi?${::dell::params::omsa_url_args_indep}",
+        mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
         enabled    => 1,
         gpgcheck   => 1,
         gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
