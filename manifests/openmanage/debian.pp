@@ -29,8 +29,8 @@ class dell::openmanage::debian {
   }
 
   apt::key {'22D16719':
-    ensure  => present,
-    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+    ensure      => present,
+    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
 mQGiBEXMKUERBAC1vCnhoGvg8+CIseA7SHMIfVCpLYtg5YLvFQhVIYLRrcUquEwO
@@ -62,9 +62,9 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key { '5E3D7775':
-    ensure  => $key_5E3D7775,
-    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+  apt::key {'5E3D7775':
+    ensure      => $key_5E3D7775,
+    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
 mQGiBELSl68RBACDhWn3X8Ls6mvdpgmPaDqSMVH2GjfWp7Zwto21cFCa8uBDvCSv
@@ -98,9 +98,9 @@ QanLpjDk1ri9fzZiUU+cSuIl3A==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key { '34D8786F':
-    ensure  => $key_34D8786F,
-    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+  apt::key {'34D8786F':
+    ensure      => $key_34D8786F,
+    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
 mQINBE9RLYYBEADEAmJvn2y182B6ZUr+u9I29f2ue87p6HQreVvPbTjiXG4z2/k0
@@ -171,25 +171,44 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  $sources_list_content = $::lsbdistcodename ? {
-    'lenny'   => "deb ftp://ftp.sara.nl/pub/sara-omsa dell6 sara\n",
-    'squeeze' => "deb ${dell::omsa_url_base}${dell::omsa_version} /\n",
-    default   => "deb http://linux.dell.com/repo/community/debian ${::lsbdistcodename} openmanage",
-  }
-
   $omsa_pkg_name = $::lsbdistcodename ? {
     'lenny'   => 'dellomsa',
     'squeeze' => [ 'srvadmin-base', 'srvadmin-storageservices' ],
-    default   => [ 'srvadmin-base', 'srvadmin-storageservices', 'srvadmin-omcommon' ],
+    default   => [
+      'srvadmin-base',
+      'srvadmin-storageservices',
+      'srvadmin-omcommon' ],
   }
 
-  apt::sources_list {'dell':
-    content => $sources_list_content,
+  case $::lsbdistcodename {
+    'lenny': {
+      apt::source{'dell':
+        location    => 'ftp://ftp.sara.nl/pub/sara-omsa',
+        release     => 'dell6',
+        repos       => 'sara',
+        include_src => false,
+      }
+    }
+    'squeeze': {
+      apt::source{'dell':
+        location    => "${dell::omsa_url_base}${dell::omsa_version}",
+        release     => '/',
+        repos       => '',
+        include_src => false,
+      }
+    }
+    default: {
+      apt::source{'dell':
+        location    => 'http://linux.dell.com/repo/community/debian',
+        release     => $::lsbdistcodename,
+        repos       => 'openmanage',
+        include_src => false,
+      }
+    }
   }
 
   package { $omsa_pkg_name:
     ensure  => present,
-    require => [Apt::Key['22D16719'],Exec['apt-get_update']],
     before  => Service['dataeng'],
   }
 
