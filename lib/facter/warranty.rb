@@ -79,7 +79,6 @@ end
 
 Facter.add(:warranty_days_left) do
   confine :is_dell_machine => true
-  confine :warranty => true
 
   setcode do
     today = Date.parse(Time.now.to_s)
