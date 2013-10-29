@@ -6,29 +6,41 @@
 #
 # See http://gitorious.org/smarmy/check_dell_warranty
 #
-class dell::warranty {
+class dell::warranty (
+  $ensure = present,
+) {
 
-  if (!defined(Class['dell'])) {
+  validate_re($ensure, '^(present|absent)$',
+  'allowed values are present and absent')
+
+  if $ensure == present and (!defined(Class['dell'])) {
     fail 'You need to declare class dell'
   }
 
   vcsrepo { "${dell::customplugins}/dell_warranty":
-    ensure   => present,
+    ensure   => $ensure,
     provider => git,
     source   => 'https://git.gitorious.org/smarmy/check_dell_warranty.git',
     revision => $dell::check_warranty_revision,
   }
 
   file { "${dell::customplugins}/dell_warranty/check_dell_warranty.py":
-    ensure  => present,
+    ensure  => $ensure,
     mode    => '0755',
     require => Vcsrepo[ "${dell::customplugins}/dell_warranty" ],
   }
 
+  $ensure_link = $ensure ? {
+    present => link,
+    default => absent,
+  }
+
   file { '/usr/local/sbin/check_dell_warranty.py':
-    ensure  => link,
+    ensure  => $ensure_link,
     target  => "${dell::customplugins}/dell_warranty/check_dell_warranty.py",
-    require => File["${dell::customplugins}/dell_warranty/check_dell_warranty.py"],
+    require => File[
+      "${dell::customplugins}/dell_warranty/check_dell_warranty.py"
+    ],
   }
 
 }
