@@ -1,4 +1,4 @@
-require 'json'
+require 'puppet'
 require 'date'
 require 'time'
 
@@ -26,7 +26,7 @@ module Facter::Util::Warranty
     if File::exists?(cache_file)
       begin
         File.open(cache_file, "r") do |f|
-          dell_cache = JSON.load(f)
+          dell_cache = PSON.load(f)
         end
         cache_time = File.mtime(cache_file)
       rescue Exception => e
@@ -42,7 +42,7 @@ module Facter::Util::Warranty
   def self.write_cache(content)
     Facter.debug("Writing to #{cache_file}")
     File.open(cache_file, 'w') do |out|
-      out.write(JSON.pretty_generate(content))
+      out.write(PSON.pretty_generate(content))
     end
   end
 
@@ -66,7 +66,7 @@ module Facter::Util::Warranty
           response = Facter::Util::Resolution.exec("/usr/bin/curl -ks '#{api_url}'")
         }
 
-        json = JSON.parse(response) if response
+        json = PSON.parse(response) if response
       rescue Exception => e
         Facter.debug("#{e.backtrace[0]}: #{$!}.")
       end
