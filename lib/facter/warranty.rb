@@ -1,52 +1,89 @@
-check_script = '/usr/local/sbin/check_dell_warranty.py'
+# Based on https://github.com/kwolf/dell_info/blob/master/lib/facter/dell_info.rb
 
-if Facter.value(:id) == 'root' and
-   Facter.value(:is_virtual) == 'false' and
-   !Facter.value(:manufacturer).nil? and
-   Facter.value(:manufacturer).match(/dell/i) and
-   File.exist?(check_script)
-  
-  tag = Facter.value(:serialnumber)
-  cache = "/var/tmp/dell-warranty-#{tag}.fact"
-  output = nil
+require 'facter/util/warranty'
 
-  if File.exists?(cache) and File.size(cache) > 1 and Time.now < File.stat(cache).mtime + 86400
-    file = File.new(cache, "r")
-    output = file.read
-    file.close
-  else
-    cmd = IO.popen("#{check_script} -s #{tag}")
-    output = cmd.read
-    cmd.close
-    if $?.exitstatus.to_i == 0
-      file = File.new(cache, "w")
-      file.puts output
-      file.close
-    end
+
+Facter.add(:is_dell_machine) do
+  confine :kernel => :linux
+  confine :is_virtual => :false
+
+  setcode { !!(Facter.value(:serialnumber) && Facter.value(:manufacturer) =~ /dell/i) }
+end
+
+Facter.add(:purchase_date) do
+  confine :is_dell_machine => true
+
+  setcode { Facter::Util::Warranty.purchase_date.to_s }
+end
+
+Facter.add(:server_age) do
+  confine :is_dell_machine => true
+
+  setcode do
+    age = ((Date.today - Facter::Util::Warranty.purchase_date).to_i / 365.0)
+    "%.2f years" % [age]
+  end 
+end
+
+Facter::Util::Warranty.warranties.each_with_index do |warranty, index|
+  Facter.add("warranty#{index}_expires") do
+    confine :is_dell_machine => true
+
+    setcode { Date.parse(warranty['EndDate']).to_s }
   end
-  
-  regex = Regexp.new('Start:\s(\d{4}-\d{2}-\d{2}),\sEnd:\s(\d{4}-\d{2}-\d{2}),\sDays left:\s(-?\d+)')
-  warranty = output.match(regex)
-  
-  if warranty and warranty.length == 4
 
-    Facter.add('warranty_start') do
-      setcode do
-        warranty[1]
+  Facter.add("warranty#{index}_type") do
+    confine :is_dell_machine => true
+
+    setcode { warranty['EntitlementType'] }
+  end
+
+  Facter.add("warranty#{index}_desc") do
+    confine :is_dell_machine => true
+
+    setcode { warranty['ServiceLevelDescription'] }
+  end
+end
+
+Facter.add(:warranty) do
+  confine :is_dell_machine => true
+
+  setcode do
+    covered = false
+    Facter::Util::Warranty.warranties.each do |warranty|
+      covered = (Date.parse(warranty['EndDate']) > Date.parse(Time.now.to_s)) if covered == false
+    end
+    covered
+  end
+end
+
+Facter.add(:warranty_start) do
+  confine :is_dell_machine => true
+
+  setcode { Facter.value(:purchase_date) }
+end
+
+Facter.add(:warranty_end) do
+  confine :is_dell_machine => true
+
+  setcode do
+    enddate = Date.parse(Time.at(0).to_s)
+    Facter::Util::Warranty.warranties.each do |warranty|
+      if Date.parse(warranty['EndDate']) > enddate
+        enddate = Date.parse(warranty['EndDate'])
       end
     end
-    
-    Facter.add('warranty_end') do
-      setcode do
-        warranty[2]
-      end
-    end
-    
-    Facter.add('warranty_days_left') do
-      setcode do
-        warranty[3]
-      end
-    end
-  
+    enddate.to_s
+  end
+end
+
+Facter.add(:warranty_days_left) do
+  confine :is_dell_machine => true
+  confine :warranty => true
+
+  setcode do
+    today = Date.parse(Time.now.to_s)
+    enddate = Date.parse(Facter.value(:warranty_end))
+    (enddate - today).to_i
   end
 end
