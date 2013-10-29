@@ -10,57 +10,10 @@ Facter.add(:is_dell_machine) do
   setcode { !!(Facter.value(:serialnumber) && Facter.value(:manufacturer) =~ /dell/i) }
 end
 
-Facter.add(:purchase_date) do
-  confine :is_dell_machine => true
-
-  setcode { Facter::Util::Warranty.purchase_date.to_s }
-end
-
-Facter.add(:server_age) do
-  confine :is_dell_machine => true
-
-  setcode do
-    age = ((Date.today - Facter::Util::Warranty.purchase_date).to_i / 365.0)
-    "%.2f years" % [age]
-  end 
-end
-
-Facter::Util::Warranty.warranties.each_with_index do |warranty, index|
-  Facter.add("warranty#{index}_expires") do
-    confine :is_dell_machine => true
-
-    setcode { Date.parse(warranty['EndDate']).to_s }
-  end
-
-  Facter.add("warranty#{index}_type") do
-    confine :is_dell_machine => true
-
-    setcode { warranty['EntitlementType'] }
-  end
-
-  Facter.add("warranty#{index}_desc") do
-    confine :is_dell_machine => true
-
-    setcode { warranty['ServiceLevelDescription'] }
-  end
-end
-
-Facter.add(:warranty) do
-  confine :is_dell_machine => true
-
-  setcode do
-    covered = false
-    Facter::Util::Warranty.warranties.each do |warranty|
-      covered = (Date.parse(warranty['EndDate']) > Date.parse(Time.now.to_s)) if covered == false
-    end
-    covered
-  end
-end
-
 Facter.add(:warranty_start) do
   confine :is_dell_machine => true
 
-  setcode { Facter.value(:purchase_date) }
+  setcode { Facter::Util::Warranty.purchase_date.to_s }
 end
 
 Facter.add(:warranty_end) do
@@ -86,3 +39,47 @@ Facter.add(:warranty_days_left) do
     (enddate - today).to_i
   end
 end
+
+# We don't need all these facts for now
+# but they're coded (and they work)
+
+#Facter.add(:server_age) do
+#  confine :is_dell_machine => true
+#
+#  setcode do
+#    age = ((Date.today - Facter::Util::Warranty.purchase_date).to_i / 365.0)
+#    "%.2f years" % [age]
+#  end 
+#end
+#
+#Facter::Util::Warranty.warranties.each_with_index do |warranty, index|
+#  Facter.add("warranty#{index}_expires") do
+#    confine :is_dell_machine => true
+#
+#    setcode { Date.parse(warranty['EndDate']).to_s }
+#  end
+#
+#  Facter.add("warranty#{index}_type") do
+#    confine :is_dell_machine => true
+#
+#    setcode { warranty['EntitlementType'] }
+#  end
+#
+#  Facter.add("warranty#{index}_desc") do
+#    confine :is_dell_machine => true
+#
+#    setcode { warranty['ServiceLevelDescription'] }
+#  end
+#end
+#
+#Facter.add(:warranty) do
+#  confine :is_dell_machine => true
+#
+#  setcode do
+#    covered = false
+#    Facter::Util::Warranty.warranties.each do |warranty|
+#      covered = (Date.parse(warranty['EndDate']) > Date.parse(Time.now.to_s)) if covered == false
+#    end
+#    covered
+#  end
+#end
