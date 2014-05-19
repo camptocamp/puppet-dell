@@ -23,6 +23,9 @@ class dell::params {
         'lenny' => 'libsmbios-bin',
         default => 'smbios-utils',
       }
+
+      $omsa_url_args_indep = ''
+      $omsa_url_args_specific = ''
     }
 
     default:  { fail("Unsupported OS family: ${::osfamily}") }
