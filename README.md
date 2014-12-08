@@ -1,8 +1,8 @@
 Dell Puppet module
 ==================
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/systemd.svg)](https://forge.puppetlabs.com/camptocamp/systemd)
-[![Build Status](https://travis-ci.org/camptocamp/puppet-systemd.png?branch=master)](https://travis-ci.org/camptocamp/puppet-systemd)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/dell.svg)](https://forge.puppetlabs.com/camptocamp/dell)
+[![Build Status](https://travis-ci.org/camptocamp/puppet-dell.png?branch=master)](https://travis-ci.org/camptocamp/puppet-dell)
 
 Overview
 --------
