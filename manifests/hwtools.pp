@@ -14,13 +14,14 @@ class dell::hwtools {
   # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
   # bios & firmwares.
 
-  case $::operatingsystem {
-    Debian: {
+  case $::osfamily {
+    'Debian': {
       package { $::dell::params::smbios_pkg:
         ensure => latest,
       }
     }
-    /RedHat|CentOS/: {
+
+    'RedHat': {
       package{['libsmbios', 'smbios-utils', 'firmware-tools']:
         ensure => latest,
       }
@@ -62,6 +63,10 @@ class dell::hwtools {
       file { '/etc/yum.repos.d/dell-software-repo.repo':
         ensure => absent,
       }
+    }
+
+    default: {
+      fail "Unsupported OS family ${::osfamily}"
     }
   }
 
