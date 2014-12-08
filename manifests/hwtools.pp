@@ -16,7 +16,7 @@ class dell::hwtools {
 
   case $::operatingsystem {
     Debian: {
-      package { "${::dell::params::smbios_pkg}":
+      package { $::dell::params::smbios_pkg:
         ensure => latest,
       }
     }

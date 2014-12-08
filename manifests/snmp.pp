@@ -18,9 +18,9 @@ smuxpeer .1.3.6.1.4.1.674.10892.1
   case $::operatingsystem {
     Debian : {
       augeas {'snmpd enable smux':
-        context   => '/files/etc/default/snmpd/',
-        changes   => "set SNMPDOPTS '\"-Lsd -u snmp -I smux -p /var/run/snmpd.pid -Lf /dev/null 127.0.0.1\"'",
-        notify    => Service['snmpd'],
+        context => '/files/etc/default/snmpd/',
+        changes => "set SNMPDOPTS '\"-Lsd -u snmp -I smux -p /var/run/snmpd.pid -Lf /dev/null 127.0.0.1\"'",
+        notify  => Service['snmpd'],
       }
 
       exec {'activate omsa snmp':
