@@ -212,4 +212,6 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
     before  => Service['dataeng'],
   }
 
+  Apt::Key['34D8786F'] -> Apt::Source['dell']
+
 }
