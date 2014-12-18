@@ -1,3 +1,7 @@
+## 2014-12-18 - Release 0.1.15
+
+Various improvements in unit tests
+
 ## 2014-12-18 - Release 0.1.13
 
   Modulesync
