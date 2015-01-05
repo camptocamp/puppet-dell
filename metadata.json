@@ -1,9 +1,9 @@
 {
   "name": "camptocamp-dell",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "author": "Camptocamp",
   "summary": "Puppet Dell module",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/camptocamp/puppet-dell",
   "project_page": "https://github.com/camptocamp/puppet-dell",
   "issues_url": "https://github.com/camptocamp/puppet-dell/issues",

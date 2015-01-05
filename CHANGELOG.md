@@ -1,3 +1,7 @@
+## 2015-01-05 - Release 0.1.16
+
+Fix License
+
 ## 2014-12-18 - Release 0.1.15
 
 Various improvements in unit tests
