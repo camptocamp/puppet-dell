@@ -31,7 +31,7 @@ class dell::warranty (
   }
 
   $ensure_link = $ensure ? {
-    present => link,
+    'present' => link,
     default => absent,
   }
 

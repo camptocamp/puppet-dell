@@ -56,7 +56,7 @@ class dell::openmanage {
 
     }
 
-    Debian: {
+    'Debian': {
       include ::dell::openmanage::debian
     }
 
