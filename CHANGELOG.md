@@ -1,3 +1,7 @@
+## 2015-01-08 - Release 0.1.17
+
+- Fix unquoted strings in cases
+
 ## 2015-01-05 - Release 0.1.16
 
 Fix License
