@@ -24,8 +24,10 @@ class dell::params {
         default => 'smbios-utils',
       }
 
+      # lint:ignore:empty_string_assignment
       $omsa_url_args_indep = ''
       $omsa_url_args_specific = ''
+      # lint:endignore
     }
 
     default:  { fail("Unsupported OS family: ${::osfamily}") }
