@@ -13,7 +13,7 @@ class dell::openmanage {
   }
 
   file {'/etc/logrotate.d/openmanage':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',

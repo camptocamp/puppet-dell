@@ -40,7 +40,7 @@ class dell::openmanage::redhat {
   # ensure file is managed in case we want to purge /etc/yum.repos.d/
   # http://projects.puppetlabs.com/issues/3152
   file { '/etc/yum.repos.d/dell-omsa-specific.repo':
-    ensure  => present,
+    ensure  => file,
     mode    => '0644',
     owner   => 'root',
     require => Yumrepo['dell-omsa-specific'],
@@ -62,7 +62,7 @@ class dell::openmanage::redhat {
 
     '6.4': {
       file { '/etc/init.d/dsm_sa_ipmi':
-        ensure  => present,
+        ensure  => file,
         source  => "puppet:///modules/dell/etc/init.d/dsm_sa_ipmi.${::osfamily}.${::lsbdistrelease}",
         mode    => '0755',
         seluser => 'system_u',
