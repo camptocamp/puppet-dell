@@ -39,7 +39,7 @@ class dell::warranty (
     ensure  => $ensure_link,
     target  => "${dell::customplugins}/dell_warranty/check_dell_warranty.py",
     require => File[
-      "${dell::customplugins}/dell_warranty/check_dell_warranty.py",
+      "${dell::customplugins}/dell_warranty/check_dell_warranty.py"
     ],
   }
 

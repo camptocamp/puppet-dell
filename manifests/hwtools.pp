@@ -3,11 +3,18 @@
 #
 # Install hardware tools
 #
-class dell::hwtools {
+# $dell_repo: use the dell repo for yumrepo, or a already defined one.
+#  The yumrepo should have the name 'dell-omsa-indep'
+#
+class dell::hwtools(
+  $dell_repo = true,
+) {
 
   if (!defined(Class['dell'])) {
     fail 'You need to declare class dell'
   }
+
+  validate_bool( $dell_repo)
 
   include ::dell::params
 
@@ -38,17 +45,19 @@ class dell::hwtools {
         mode   => '0644',
       }
 
-      # http://linux.dell.com/wiki/index.php/Repository/software
-      yumrepo {'dell-omsa-indep':
-        descr      => 'Dell OMSA repository - Hardware independent',
-        mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
-        enabled    => 1,
-        gpgcheck   => 1,
-        gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-        require    => [
-          File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
-          File['/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios'],
-        ],
+      if $dell_repo {
+        # http://linux.dell.com/wiki/index.php/Repository/software
+        yumrepo {'dell-omsa-indep':
+          descr      => 'Dell OMSA repository - Hardware independent',
+          mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
+          enabled    => 1,
+          gpgcheck   => 1,
+          gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
+          require    => [
+            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
+            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios'],
+          ],
+        }
       }
 
       # ensure file is managed in case we want to purge /etc/yum.repos.d/
