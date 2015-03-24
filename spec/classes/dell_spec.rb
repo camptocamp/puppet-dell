@@ -10,4 +10,22 @@ describe 'dell' do
 
   it { should compile.with_all_deps }
 
+  let(:facts) {{
+    :lsbdistcodename => 'trusty',
+    :osfamily        => 'Debian',
+    :operatingsystem => 'Ubuntu',
+    :productname     => 'foo',
+  }}
+
+  it { should compile.with_all_deps }
+
+  let(:facts) {{
+    :lsbdistcodename => nil,
+    :osfamily        => 'RedHat',
+    :operatingsystem => 'CentOS',
+    :productname     => 'foo',
+  }}
+
+  it { should compile.with_all_deps }
+
 end

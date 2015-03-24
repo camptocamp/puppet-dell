@@ -38,8 +38,8 @@ class dell::openmanage {
     recurse => true,
   }
 
-  case $::operatingsystem {
-    /RedHat|CentOS/: {
+  case $::osfamily {
+    RedHat: {
 
       # openmanage is a mess to install on redhat, and recent versions
       # don't support older hardware. So puppet will install it if absent,
@@ -61,7 +61,7 @@ class dell::openmanage {
     }
 
     default: {
-      err("Unsupported operatingsystem: ${::operatingsystem}.")
+      err("Unsupported operatingsystem: ${::osfamily}.")
     }
 
   }
