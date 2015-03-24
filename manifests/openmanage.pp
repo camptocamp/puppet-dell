@@ -39,7 +39,7 @@ class dell::openmanage {
   }
 
   case $::osfamily {
-    RedHat: {
+    'RedHat': {
 
       # openmanage is a mess to install on redhat, and recent versions
       # don't support older hardware. So puppet will install it if absent,
