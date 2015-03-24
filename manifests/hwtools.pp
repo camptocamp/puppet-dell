@@ -21,62 +21,18 @@ class dell::hwtools(
   # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
   # bios & firmwares.
 
-  case $::osfamily {
-    'Debian': {
-      package { $::dell::params::smbios_pkg:
-        ensure => latest,
-      }
-    }
 
-    'RedHat': {
-      package{['libsmbios', 'smbios-utils', 'firmware-tools']:
-        ensure => latest,
-      }
-
-      file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-dell':
-        ensure => file,
-        source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
-        mode   => '0644',
-      }
-
-      file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
-        ensure => file,
-        source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios',
-        mode   => '0644',
-      }
-
-      if $dell_repo {
-        # http://linux.dell.com/wiki/index.php/Repository/software
-        yumrepo {'dell-omsa-indep':
-          descr      => 'Dell OMSA repository - Hardware independent',
-          mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
-          enabled    => 1,
-          gpgcheck   => 1,
-          gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-          require    => [
-            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
-            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios'],
-          ],
-        }
-      }
-
-      # ensure file is managed in case we want to purge /etc/yum.repos.d/
-      # http://projects.puppetlabs.com/issues/3152
-      file { '/etc/yum.repos.d/dell-omsa-indep.repo':
-        ensure  => file,
-        mode    => '0644',
-        owner   => 'root',
-        require => Yumrepo['dell-omsa-indep'],
-      }
-
-      file { '/etc/yum.repos.d/dell-software-repo.repo':
-        ensure => absent,
-      }
-    }
-
-    default: {
-      fail "Unsupported OS family ${::osfamily}"
+  if $dell_repo {
+    class { '::dell::hwtools::repo':
+      before => Class['dell::hwtools::package'],
     }
   }
 
+  include ::dell::hwtools::package
+
+  if $::osfamily == 'RedHat' {
+    file { '/etc/yum.repos.d/dell-software-repo.repo':
+      ensure => absent,
+    }
+  }
 }
