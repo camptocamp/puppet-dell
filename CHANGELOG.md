@@ -1,3 +1,9 @@
+## 2015-03-24 - Release 0.2.0
+
+- Add dell_repo param to dell::hwtools and dell::openmanage::redhat
+- Lint
+- Future parser fixes
+
 ## 2015-01-08 - Release 0.1.17
 
 - Fix unquoted strings in cases
