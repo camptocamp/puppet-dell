@@ -70,9 +70,10 @@ class dell::openmanage::redhat(
   case $::lsbdistrelease {
 
     '6.4': {
+      $module_path = get_module_path($module_name)
       file { '/etc/init.d/dsm_sa_ipmi':
         ensure  => file,
-        source  => "puppet:///modules/dell/etc/init.d/dsm_sa_ipmi.${::osfamily}.${::lsbdistrelease}",
+        content => file("${module_path}/files/etc/init.d/dsm_sa_ipmi.${::osfamily}.${::lsbdistrelease}"),
         mode    => '0755',
         seluser => 'system_u',
         selrole => 'object_r',

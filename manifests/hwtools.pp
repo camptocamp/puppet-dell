@@ -33,16 +33,17 @@ class dell::hwtools(
         ensure => latest,
       }
 
+      $module_path = get_module_path($module_name)
       file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-dell':
-        ensure => file,
-        source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
-        mode   => '0644',
+        ensure  => file,
+        content => file("${module_path}/files/etc/pki/rpm-gpg/RPM-GPG-KEY-dell"),
+        mode    => '0644',
       }
 
       file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
-        ensure => file,
-        source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios',
-        mode   => '0644',
+        ensure  => file,
+        content => file("${module_path}/files/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"),
+        mode    => '0644',
       }
 
       if $dell_repo {
