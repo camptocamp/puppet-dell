@@ -1,3 +1,7 @@
+## 2015-07-01 - Release 0.2.11
+
+Use long fingerprint instead of short fingerprint
+
 ## 2015-06-26 - Release 0.2.10
 
 Fix strict_variables activation with rspec-puppet 2.2
