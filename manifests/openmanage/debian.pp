@@ -28,7 +28,7 @@ class dell::openmanage::debian {
     default    => 'absent',
   }
 
-  apt::key {'22D16719':
+  apt::key {'4A801EC6AFCAF6474226759861872CD922D16719':
     ensure      => present,
     key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)
