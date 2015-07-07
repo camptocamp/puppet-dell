@@ -1,3 +1,7 @@
+## 2015-07-07 - Release 0.2.12
+
+Add new repository from Dell, needed for RHEL7.
+
 ## 2015-07-01 - Release 0.2.11
 
 Use long fingerprint instead of short fingerprint
