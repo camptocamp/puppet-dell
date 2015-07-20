@@ -8,6 +8,7 @@
 #
 class dell::warranty (
   $ensure = present,
+  $git_remote = 'https://git.gitorious.org/smarmy/check_dell_warranty.git',
 ) {
 
   validate_re($ensure, '^(present|absent)$',
@@ -20,7 +21,7 @@ class dell::warranty (
   vcsrepo { "${dell::customplugins}/dell_warranty":
     ensure   => $ensure,
     provider => git,
-    source   => 'https://git.gitorious.org/smarmy/check_dell_warranty.git',
+    source   => $git_remote,
     revision => $dell::check_warranty_revision,
   }
 
