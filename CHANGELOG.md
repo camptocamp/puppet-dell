@@ -1,3 +1,7 @@
+## 2015-08-21 - Release 0.2.13
+
+Use docker for acceptance tests
+
 ## 2015-07-07 - Release 0.2.12
 
 Add new repository from Dell, needed for RHEL7.
