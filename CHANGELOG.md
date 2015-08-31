@@ -1,3 +1,10 @@
+## 2015-08-31 - Release 0.3.0
+
+- Fix is_virtual confinement on facts
+- Add support for wheezy and jessie in openmanage
+- Add $git_remote parameter to dell::warranty
+- Use rspec-puppet-facts in specs
+
 ## 2015-08-21 - Release 0.2.13
 
 Use docker for acceptance tests

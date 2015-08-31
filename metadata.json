@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-dell",
-  "version": "0.2.13",
+  "version": "0.3.0",
   "author": "Camptocamp",
   "summary": "Puppet Dell module",
   "license": "Apache-2.0",
