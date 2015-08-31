@@ -197,6 +197,14 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         include_src => false,
       }
     }
+    'jessie': {
+      apt::source{'dell':
+        location    => 'http://linux.dell.com/repo/community/debian',
+        release     => 'wheezy',
+        repos       => 'openmanage',
+        include_src => false,
+      }
+    }
     default: {
       apt::source{'dell':
         location    => 'http://linux.dell.com/repo/community/debian',
