@@ -1,5 +1,6 @@
 fixtures:
   repositories:
+    vcsrepo: https://github.com/puppetlabs/puppetlabs-vcsrepo.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:
     dell: "#{source_dir}"
