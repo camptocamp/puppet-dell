@@ -5,7 +5,7 @@ require 'facter/util/warranty'
 
 Facter.add(:is_dell_machine) do
   confine :kernel => :linux
-  confine :is_virtual => :false
+  confine :is_virtual => [:false, false]
 
   setcode { !!(Facter.value(:serialnumber) && Facter.value(:manufacturer) =~ /dell/i) }
 end
