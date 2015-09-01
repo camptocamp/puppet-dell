@@ -1,3 +1,7 @@
+## 2015-09-01 - Release 0.3.1
+
+- Update API key
+
 ## 2015-08-31 - Release 0.3.0
 
 - Fix is_virtual confinement on facts
