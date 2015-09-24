@@ -62,7 +62,7 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key {'5E3D7775':
+  apt::key {'87C508DB69454A0101A9B852E74433E25E3D7775':
     ensure      => $key_omsa6,
     key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
@@ -98,7 +98,7 @@ QanLpjDk1ri9fzZiUU+cSuIl3A==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key {'34D8786F':
+  apt::key {'42550ABD1E80D7C1BC0BAD851285491434D8786F':
     ensure      => $key_omsa7,
     key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
@@ -228,6 +228,6 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
     before => Service['dataeng'],
   }
 
-  Apt::Key['34D8786F'] -> Apt::Source['dell']
+  Apt::Key['42550ABD1E80D7C1BC0BAD851285491434D8786F'] -> Apt::Source['dell']
 
 }
