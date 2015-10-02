@@ -67,7 +67,7 @@ class dell::openmanage::redhat(
   # See http://lists.us.dell.com/pipermail/linux-poweredge/2013-March/047794.html
   # This file is a kind a merge between /etc/init.d/ipmi (provided by OpenIPMI)
   # and /etc/init.d/dsm_sa_ipmi (provided by OMSA 7.2)
-  case $::lsbdistrelease {
+  case $::operatingsystemrelease {
 
     '6.4': {
       $module_path = get_module_path($module_name)
