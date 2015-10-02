@@ -16,4 +16,3 @@ describe 'dell::openmanage' do
     end
   end
 end
-
