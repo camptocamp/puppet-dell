@@ -5,6 +5,8 @@
 #
 class dell::openmanage::debian {
 
+  include ::apt
+
   if (!defined(Class['dell'])) {
     fail 'You need to declare class dell'
   }
