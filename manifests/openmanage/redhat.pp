@@ -28,8 +28,8 @@ class dell::openmanage::redhat(
     before  => Service['dataeng'],
   }
 
-  # Ce repo héberge openmanage, mais dépendent d'un plugin yum qui
-  # va analyser le hardware et échoue si le système n'est pas supporté.
+  # This repo hosts openmanage but is dependent from a plugin that is
+  # going to analyse the harware and will fail if the system is not supported
   #
   if $dell_repo {
     # http://linux.dell.com/repo/hardware/latest
