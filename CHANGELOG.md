@@ -1,3 +1,16 @@
+## 2016-02-18 - Release 0.4.0
+
+- Use full apt fingerprints (issue #55)
+- Add acceptance tests
+- Add RedHat 7 support
+- Add Debian 8 support
+- Remove Ubuntu 10.04 support
+- Cleanup metadata.json
+- Add unit tests
+- Don't use lsb facts for RedHat
+- Include apt class in dell::openmanage::debian
+- Use forge for fixtures
+
 ## 2015-09-01 - Release 0.3.1
 
 - Update API key
