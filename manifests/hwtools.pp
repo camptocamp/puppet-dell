@@ -4,7 +4,7 @@
 # Install hardware tools
 #
 # $dell_repo: use the dell repo for yumrepo, or a already defined one.
-#  The yumrepo should have the name 'dell-omsa-indep'
+#  The yumrepo should have the name 'dell-system-update_independent'
 #
 class dell::hwtools(
   $dell_repo = true,
@@ -29,8 +29,25 @@ class dell::hwtools(
     }
 
     'RedHat': {
-      package{['libsmbios', 'smbios-utils', 'firmware-tools']:
+      # removing packages is always producting a line like
+      # (/Stage[main]/Dell::Hwtools/Package[smbios-utils-python]/ensure) created
+      # into the log. This is a known bug, see
+      # https://projects.puppetlabs.com/issues/12722
+
+      # When upgrading from OMSA to DSU on RHEL there are conflicting packages
+      # preventing the proper upgrade. To fix it we need to 
+      # 'yum erase smbios-utils-python python-smbios'
+      package { [ 
+        'smbios-utils-python',
+        'python-smbios',
+      ]:
+        ensure => purged,
+        before => Package['dell-system-update'],
+      }
+
+      package{['dell-system-update']:
         ensure => latest,
+	require  => Yumrepo["dell-system-update_independent"],
       }
 
       $module_path = get_module_path($module_name)
@@ -40,38 +57,37 @@ class dell::hwtools(
         mode    => '0644',
       }
 
-      file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
-        ensure  => file,
-        content => file("${module_path}/files/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios"),
-        mode    => '0644',
-      }
-
       if $dell_repo {
-        # http://linux.dell.com/wiki/index.php/Repository/software
-        yumrepo {'dell-omsa-indep':
-          descr      => 'Dell OMSA repository - Hardware independent',
-          mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
+        # http://linux.dell.com/repo/hardware/dsu/
+        yumrepo {'dell-system-update_independent':
+          descr      => 'Dell System Update repository - OS independent',
+          baseurl    => "${dell::omsa_url_base}${dell::omsa_version}/os_independent/",
           enabled    => 1,
           gpgcheck   => 1,
-          gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-          require    => [
-            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
-            File['/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios'],
-          ],
+          gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
+          require    => File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
         }
       }
 
       # ensure file is managed in case we want to purge /etc/yum.repos.d/
       # http://projects.puppetlabs.com/issues/3152
-      file { '/etc/yum.repos.d/dell-omsa-indep.repo':
+      file { '/etc/yum.repos.d/dell-system-update_independent.repo':
         ensure  => file,
         mode    => '0644',
         owner   => 'root',
-        require => Yumrepo['dell-omsa-indep'],
+        require => Yumrepo['dell-system-update_independent'],
       }
 
-      file { '/etc/yum.repos.d/dell-software-repo.repo':
+      file { [
+        '/etc/yum.repos.d/dell-software-repo.repo',
+        '/etc/yum.repos.d/dell-omsa-indep.repo',
+      ]:
         ensure => absent,
+      }
+
+      # old RPM keys are no longer needed
+      file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
+        ensure  => absent,
       }
     }
 
