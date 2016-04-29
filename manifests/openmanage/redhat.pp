@@ -24,7 +24,7 @@ class dell::openmanage::redhat(
   #   one. For us it means 'yum erase tog-pegasus-libs'
   #   before installing om5.
 
-  if $::operatingsystemmajrelease >= 7 {
+  if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
     package { 'tog-pegasus-libs':
       ensure => purged,
       before => Package['srvadmin-base', 'srvadmin-storageservices'],
