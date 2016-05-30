@@ -29,7 +29,7 @@ class dell::hwtools(
     }
 
     'RedHat': {
-      package{['libsmbios', 'smbios-utils', 'firmware-tools']:
+      package{['libsmbios', 'smbios-utils-bin', 'firmware-tools']:
         ensure => latest,
       }
 
