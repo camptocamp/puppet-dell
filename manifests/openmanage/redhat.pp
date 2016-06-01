@@ -15,10 +15,10 @@ class dell::openmanage::redhat(
   }
 
   validate_bool( $dell_repo)
-  
+
   # On RHEL7 there is an issue with the conflict of packages
   #   libcmpiCppImpl0 vs. tog-pegasus-libs
-  # According to https://access.redhat.com/solutions/262203 and 
+  # According to https://access.redhat.com/solutions/262203 and
   #   https://bugzilla.redhat.com/show_bug.cgi?id=1068799 the libraries
   #   are conflicting by design and the solution is to choose the right
   #   one. For us it means 'yum erase tog-pegasus-libs'
@@ -30,7 +30,6 @@ class dell::openmanage::redhat(
       before => Package['srvadmin-base', 'srvadmin-storageservices'],
     }
   }
-
   package { ['srvadmin-base', 'srvadmin-storageservices']:
     ensure  => present,
     require => Yumrepo['dell-system-update_dependent'],
@@ -47,7 +46,7 @@ class dell::openmanage::redhat(
       mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_dependent}",
       enabled    => 1,
       gpgcheck   => 1,
-      gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
+      gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
       require    => [
         File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
         ],

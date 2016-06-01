@@ -18,10 +18,6 @@ class dell::hwtools(
 
   include ::dell::params
 
-  # Dans ces paquets, on trouve de quoi flasher et extraires des infos des
-  # bios & firmwares.
-
-
   if $dell_repo {
     class { '::dell::hwtools::repo':
       before => Class['dell::hwtools::package'],
