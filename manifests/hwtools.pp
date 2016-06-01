@@ -4,7 +4,7 @@
 # Install hardware tools
 #
 # $dell_repo: use the dell repo for yumrepo, or a already defined one.
-#  The yumrepo should have the name 'dell-omsa-indep'
+#  The yumrepo should have the name 'dell-system-update_independent'
 #
 class dell::hwtools(
   $dell_repo = true,
@@ -29,10 +29,4 @@ class dell::hwtools(
   }
 
   include ::dell::hwtools::package
-
-  if $::osfamily == 'RedHat' {
-    file { '/etc/yum.repos.d/dell-software-repo.repo':
-      ensure => absent,
-    }
-  }
 }
