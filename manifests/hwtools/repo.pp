@@ -22,7 +22,7 @@ class dell::hwtools::repo {
       ensure  => file,
       mode    => '0644',
       owner   => 'root',
-      require => Yumrepo['dell-omsa-indep'],
+      require => Yumrepo['dell-system-update_independent'],
     }
 
     file {
