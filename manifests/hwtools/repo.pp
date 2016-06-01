@@ -12,7 +12,7 @@ class dell::hwtools::repo {
       baseurl  => "${dell::omsa_url_base}${dell::omsa_version}/os_independent/",
       enabled  => 1,
       gpgcheck => 1,
-      gpgkey   => 'file :///etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
+      gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
       require  => File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
     }
 
