@@ -18,6 +18,7 @@ class dell::openmanage::debian {
     'OMSA_6.5' => 'present',
     'OMSA_7.0' => 'present',
     'OMSA_7.1' => 'present',
+    'OMSA_7.2' => 'present',
     'latest'   => 'present',
     ''         => 'present',
     default    => 'absent',
@@ -221,6 +222,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         release     => $::lsbdistcodename,
         repos       => 'openmanage',
         include_src => false,
+        notify      => Exec['apt_update'],
       }
     }
   }
@@ -228,6 +230,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
   package { $omsa_pkg_name:
     ensure => present,
     before => Service['dataeng'],
+    require => Exec['apt_update'],
   }
 
   Apt::Key['42550ABD1E80D7C1BC0BAD851285491434D8786F'] -> Apt::Source['dell']
