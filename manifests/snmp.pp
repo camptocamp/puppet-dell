@@ -5,14 +5,11 @@
 #
 class dell::snmp {
 
-  concat::fragment {'dell-omsa':
-    target  => '/etc/snmp/snmpd.conf',
-    content => "# section managed by puppet
-
-# Allow Systems Management Data Engine SNMP to connect to snmpd using SMUX
-smuxpeer .1.3.6.1.4.1.674.10892.1
-",
-    notify  => Service['dataeng'],
+  file_line { 'snmp smux authorize':
+    ensure => present,
+    line   => 'smuxpeer .1.3.6.1.4.1.674.10892.1',
+    path   => '/etc/snmp/snmpd.conf',
+    notify => Service['dataeng'],
   }
 
   case $::operatingsystem {
