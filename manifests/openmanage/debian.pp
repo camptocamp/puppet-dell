@@ -18,6 +18,7 @@ class dell::openmanage::debian {
     'OMSA_6.5' => 'present',
     'OMSA_7.0' => 'present',
     'OMSA_7.1' => 'present',
+    'OMSA_7.2' => 'present',
     'latest'   => 'present',
     ''         => 'present',
     default    => 'absent',
