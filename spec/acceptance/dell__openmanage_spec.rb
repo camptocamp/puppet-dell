@@ -3,7 +3,8 @@ require 'spec_helper_acceptance'
 describe 'dell::openmanage' do
 
   context 'when running puppet code' do
-    pp = "include ::dell::openmanage"
+    pp = "include ::dell
+    include ::dell::openmanage"
 
     it 'should apply with no errors' do
       apply_manifest(pp, :catch_failures => true)
