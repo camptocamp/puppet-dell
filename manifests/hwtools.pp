@@ -9,10 +9,7 @@
 class dell::hwtools(
   $dell_repo = true,
 ) {
-
-  if (!defined(Class['dell'])) {
-    fail 'You need to declare class dell'
-  }
+  include ::dell
 
   validate_bool( $dell_repo)
 
