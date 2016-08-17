@@ -236,8 +236,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
   }
 
   package { $omsa_pkg_name:
-    ensure => present,
-    before => Service['dataeng'],
+    ensure  => present,
+    require => Class['apt::update'],
+    before  => Service['dataeng'],
   }
 
   Apt::Key['42550ABD1E80D7C1BC0BAD851285491434D8786F'] -> Apt::Source['dell']
