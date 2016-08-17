@@ -31,8 +31,8 @@ class dell::openmanage::debian {
   }
 
   apt::key {'4A801EC6AFCAF6474226759861872CD922D16719':
-    ensure      => present,
-    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+    ensure  => present,
+    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
 mQGiBEXMKUERBAC1vCnhoGvg8+CIseA7SHMIfVCpLYtg5YLvFQhVIYLRrcUquEwO
@@ -65,8 +65,8 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
   }
 
   apt::key {'87C508DB69454A0101A9B852E74433E25E3D7775':
-    ensure      => $key_omsa6,
-    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+    ensure  => $key_omsa6,
+    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
 mQGiBELSl68RBACDhWn3X8Ls6mvdpgmPaDqSMVH2GjfWp7Zwto21cFCa8uBDvCSv
@@ -101,8 +101,8 @@ QanLpjDk1ri9fzZiUU+cSuIl3A==
   }
 
   apt::key {'42550ABD1E80D7C1BC0BAD851285491434D8786F':
-    ensure      => $key_omsa7,
-    key_content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
+    ensure  => $key_omsa7,
+    content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
 mQINBE9RLYYBEADEAmJvn2y182B6ZUr+u9I29f2ue87p6HQreVvPbTjiXG4z2/k0
