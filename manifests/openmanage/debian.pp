@@ -188,7 +188,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         location    => 'ftp://ftp.sara.nl/pub/sara-omsa',
         release     => 'dell6',
         repos       => 'sara',
-        include_src => false,
+        include     => {
+          src       => false,
+        },
       }
     }
     'squeeze': {
@@ -196,7 +198,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         location    => "${dell::omsa_url_base}${dell::omsa_version}",
         release     => '/',
         repos       => '',
-        include_src => false,
+        include     => {
+          src       => false,
+        },
       }
     }
     'wheezy': {
@@ -204,7 +208,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         location    => 'http://linux.dell.com/repo/community/debian',
         release     => 'wheezy',
         repos       => 'openmanage',
-        include_src => false,
+        include     => {
+          src       => false,
+        },
       }
     }
     'jessie': {
@@ -212,7 +218,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         location    => 'http://linux.dell.com/repo/community/debian',
         release     => 'wheezy',
         repos       => 'openmanage',
-        include_src => false,
+        include     => {
+          src       => false,
+        },
       }
     }
     default: {
@@ -220,7 +228,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         location    => 'http://linux.dell.com/repo/community/debian',
         release     => $::lsbdistcodename,
         repos       => 'openmanage',
-        include_src => false,
+        include     => {
+          src       => false,
+        },
       }
     }
   }
