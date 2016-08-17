@@ -2,6 +2,12 @@ require 'beaker-rspec'
 
 install_puppet_agent_on hosts, {}
 
+hosts.each do |host|
+  if fact('osfamily') == 'RedHat'
+    install_package host, 'epel-release'
+  end
+end
+
 RSpec.configure do |c|
   module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   module_name = module_root.split('-').last
