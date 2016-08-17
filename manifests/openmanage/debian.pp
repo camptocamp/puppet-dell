@@ -185,50 +185,50 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
   case $::lsbdistcodename {
     'lenny': {
       apt::source{'dell':
-        location    => 'ftp://ftp.sara.nl/pub/sara-omsa',
-        release     => 'dell6',
-        repos       => 'sara',
-        include     => {
+        location => 'ftp://ftp.sara.nl/pub/sara-omsa',
+        release  => 'dell6',
+        repos    => 'sara',
+        include  => {
           src       => false,
         },
       }
     }
     'squeeze': {
       apt::source{'dell':
-        location    => "${dell::omsa_url_base}${dell::omsa_version}",
-        release     => '/',
-        repos       => '',
-        include     => {
+        location => "${dell::omsa_url_base}${dell::omsa_version}",
+        release  => '/',
+        repos    => '',
+        include  => {
           src       => false,
         },
       }
     }
     'wheezy': {
       apt::source{'dell':
-        location    => 'http://linux.dell.com/repo/community/debian',
-        release     => 'wheezy',
-        repos       => 'openmanage',
-        include     => {
+        location => 'http://linux.dell.com/repo/community/debian',
+        release  => 'wheezy',
+        repos    => 'openmanage',
+        include  => {
           src       => false,
         },
       }
     }
     'jessie': {
       apt::source{'dell':
-        location    => 'http://linux.dell.com/repo/community/debian',
-        release     => 'wheezy',
-        repos       => 'openmanage',
-        include     => {
+        location => 'http://linux.dell.com/repo/community/debian',
+        release  => 'wheezy',
+        repos    => 'openmanage',
+        include  => {
           src       => false,
         },
       }
     }
     default: {
       apt::source{'dell':
-        location    => 'http://linux.dell.com/repo/community/debian',
-        release     => $::lsbdistcodename,
-        repos       => 'openmanage',
-        include     => {
+        location => 'http://linux.dell.com/repo/community/debian',
+        release  => $::lsbdistcodename,
+        repos    => 'openmanage',
+        include  => {
           src       => false,
         },
       }
