@@ -43,7 +43,7 @@ class dell::params {
 
     'Debian': {
       $omsa_url_base = $::lsbdistcodename ? {
-        'wheeze' => 'http://linux.dell.com/repo/community/debian/',
+        'wheezy' => 'http://linux.dell.com/repo/community/debian/',
         default  => 'http://linux.dell.com/repo/community/deb/',
       }
 
