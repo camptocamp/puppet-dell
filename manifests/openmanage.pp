@@ -3,12 +3,14 @@
 #
 # Install openmanage tools
 #
-class dell::openmanage {
+class dell::openmanage (
+  $service_ensure = 'running',
+) {
 
   include ::dell::hwtools
 
   service { 'dataeng':
-    ensure    => running,
+    ensure    => $service_ensure,
     hasstatus => true,
   }
 
