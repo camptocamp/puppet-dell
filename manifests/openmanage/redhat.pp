@@ -16,12 +16,6 @@ class dell::openmanage::redhat(
 
   validate_bool( $dell_repo)
 
-  # this package contains the yum plugin which find the best yum repository
-  # depending on the hardware.
-  package{'firmware-addon-dell':
-    ensure => latest,
-  }
-
   package { ['srvadmin-base', 'srvadmin-storageservices']:
     ensure  => present,
     require => Yumrepo['dell-omsa-specific'],
