@@ -2,12 +2,16 @@ class dell::hwtools::repo {
   if $::osfamily == 'RedHat' {
     file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-dell':
       ensure => file,
+      owner  => 'root',
+      group  => 'root',
       source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
       mode   => '0644',
     }
 
     file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
       ensure => file,
+      owner  => 'root',
+      group  => 'root',
       source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios',
       mode   => '0644',
     }
@@ -29,8 +33,9 @@ class dell::hwtools::repo {
     # http://projects.puppetlabs.com/issues/3152
     file { '/etc/yum.repos.d/dell-omsa-indep.repo':
       ensure  => file,
-      mode    => '0644',
       owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       require => Yumrepo['dell-omsa-indep'],
     }
   }
