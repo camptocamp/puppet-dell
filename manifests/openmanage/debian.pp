@@ -226,7 +226,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
     }
     'xenial': {
       fail('Ubuntu 16.04 is not supported by Dell')
-    },
+    }
     default: {
       apt::source{'dell':
         location => 'http://linux.dell.com/repo/community/debian',
