@@ -1,3 +1,25 @@
+## 2016-08-23 - Release 0.5.0
+
+- Fix US-ASCII encoding issue due to french accents in comments (GH #56)
+- Fix wheeze typo to wheezy (GH #64)
+- Update skeleton with modulesync
+- Require dell in dell::openmanage
+- Require ::dell in dell::hwtools
+- Fix apt module deprecated parameters
+- Fix ordering of sources.list/packages
+- Do not attempt to start dataeng in the tests
+- Use libsmbios-bin instead of smbios-utils for squeeze and wheezy
+- Remove support for Ubuntu 12.04
+- Install epel repository for acceptance tests (GH #65)
+- Add OSMA_7.2 for Debian (fix #61)
+- Fix ordering of dell::hwtools (GH #36)
+- Set owner and group of files
+- Allow acceptance tests failures
+
+## 2016-06-20 - Release 0.4.1
+
+- Update skeleton with modulesync
+
 ## 2016-02-18 - Release 0.4.0
 
 - Use full apt fingerprints (issue #55)
