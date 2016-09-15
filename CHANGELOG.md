@@ -1,3 +1,7 @@
+## 2016-09-15 - Release 0.5.1
+
+- Use smbios-utils instead of libsmbios-bin for wheezy
+
 ## 2016-08-23 - Release 0.5.0
 
 - Fix US-ASCII encoding issue due to french accents in comments (GH #56)
