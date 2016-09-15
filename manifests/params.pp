@@ -48,8 +48,8 @@ class dell::params {
       }
 
       $smbios_pkg = $::lsbdistcodename ? {
-        /lenny|squeeze|wheezy/ => 'libsmbios-bin',
-        default                => 'smbios-utils',
+        /lenny|squeeze/ => 'libsmbios-bin',
+        default         => 'smbios-utils',
       }
 
       # lint:ignore:empty_string_assignment
