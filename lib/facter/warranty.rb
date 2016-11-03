@@ -21,7 +21,10 @@ Facter.add(:warranty_end) do
 
   setcode do
     enddate = Date.parse(Time.at(0).to_s)
-    Facter::Util::Warranty.warranties.each do |warranty|
+    warranties = Facter::Util::Warranty.warranties
+    warranties = [warranties] unless warranties.is_a?(Array)
+
+    warranties.each do |warranty|
       if Date.parse(warranty['EndDate']) > enddate
         enddate = Date.parse(warranty['EndDate'])
       end
