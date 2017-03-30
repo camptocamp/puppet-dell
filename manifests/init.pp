@@ -22,7 +22,7 @@ class dell (
 
   validate_string($api_key)
 
-  class { $dell::warranty:
+  class { 'dell::warranty':
     api_key => $api_key,
   }
 }
