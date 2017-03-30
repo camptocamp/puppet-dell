@@ -6,6 +6,7 @@ class dell (
   $customplugins           = $dell::params::customplugins,
   $check_warranty_revision = $dell::params::check_warranty_revision,
   $manage_debian_apt       = $dell::params::manage_debian_apt,
+  $api_key                 = undef,
 ) inherits ::dell::params {
 
   validate_string($omsa_url_base)
@@ -18,4 +19,10 @@ class dell (
   validate_absolute_path($customplugins)
 
   validate_string($check_warranty_revision)
+
+  validate_string($api_key)
+
+  class { $dell::warranty:
+    api_key => $api_key,
+  }
 }
