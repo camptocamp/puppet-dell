@@ -1,3 +1,9 @@
+## 2017-04-03 - Release 0.6.0
+
+- Port warranty facts to v4 Dell API (GH #72)
+- Add manage_debian_apt parameter (GH #71)
+- Remove Puppet 3 tests
+
 ## 2016-09-15 - Release 0.5.1
 
 - Use smbios-utils instead of libsmbios-bin for wheezy
