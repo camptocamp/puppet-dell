@@ -1,3 +1,7 @@
+## 2017-04-06 - Release 0.6.1
+
+- Fix default repository for Red Hat 7
+
 ## 2017-04-03 - Release 0.6.0
 
 - Port warranty facts to v4 Dell API (GH #72)
