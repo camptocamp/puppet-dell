@@ -34,7 +34,7 @@ class dell::params {
           $omsa_url_args_indep = 'osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver'
           $omsa_url_args_specific = 'osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver'
           $omsa_version = $::productname ? {
-            default    => 'Linux_Repository_17.03.00',
+            default    => 'DSU_17.03.00',
           }
         } #default
 
