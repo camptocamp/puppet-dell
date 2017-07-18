@@ -33,6 +33,7 @@ class dell::openmanage (
     ensure  => absent,
   }
 
+  # TODO : This seems a bit generic.  Is it required?
   tidy {'/var/log':
     matches => 'TTY_*.log.*',
     age     => '60d',
