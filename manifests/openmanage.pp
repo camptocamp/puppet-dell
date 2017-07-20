@@ -4,7 +4,8 @@
 # Install openmanage tools
 #
 class dell::openmanage (
-  $service_ensure = 'running',
+  String  $service_ensure = 'running',
+  Boolean $tidy_logs      = true,
 ) {
 
   include ::dell::hwtools
@@ -33,12 +34,15 @@ class dell::openmanage (
     ensure  => absent,
   }
 
-  # TODO : This seems a bit generic.  Is it required?
-  tidy {'/var/log':
-    matches => 'TTY_*.log.*',
-    age     => '60d',
-    backup  => false,
-    recurse => true,
+  if $tidy_logs {
+    # TODO : This seems a bit generic.
+    #        Is it required, or can it be made more specific?
+    tidy {'/var/log':
+      matches => 'TTY_*.log.*',
+      age     => '60d',
+      backup  => false,
+      recurse => true,
+    }
   }
 
   case $::osfamily {
