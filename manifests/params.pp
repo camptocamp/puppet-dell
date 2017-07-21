@@ -19,7 +19,8 @@ class dell::params {
           $omsa_url_args_indep = 'osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver'
           $omsa_url_args_dependent = 'osname=el$releasever&basearch=$basearch&native=1'
           $omsa_version = $::productname ? {
-            default    => 'dsu', # latest DSU version
+            # TODO : Different OMSA versions for various hardware possibilities
+            default    => 'DSU_17.07.00', # latest DSU version at time of writing
           }
         } #default
 
