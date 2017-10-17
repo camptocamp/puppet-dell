@@ -1,3 +1,4 @@
+# Base class
 class dell (
   String            $omsa_url_base           = $dell::params::omsa_url_base,
   String            $omsa_url_args_dependent = $dell::params::omsa_url_args_dependent,

@@ -47,7 +47,7 @@ class dell::openmanage::redhat(
       mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_dependent}",
       enabled    => 1,
       gpgcheck   => 1,
-      gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell",
+      gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
       require    => File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
     }
   }

@@ -1,3 +1,4 @@
+# Install package
 class dell::hwtools::package {
   case $::osfamily {
     'Debian': {
@@ -29,7 +30,7 @@ class dell::hwtools::package {
 
       package{['dell-system-update']:
         ensure  => latest,
-	require => Yumrepo["dell-system-update_independent"],
+        require => Yumrepo['dell-system-update_independent'],
       }
     }
 
