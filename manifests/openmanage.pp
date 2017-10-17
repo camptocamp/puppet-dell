@@ -4,7 +4,8 @@
 # Install openmanage tools
 #
 class dell::openmanage (
-  $service_ensure = 'running',
+  String  $service_ensure = 'running',
+  Boolean $tidy_logs      = true,
 ) {
 
   include ::dell::hwtools
@@ -33,11 +34,15 @@ class dell::openmanage (
     ensure  => absent,
   }
 
-  tidy {'/var/log':
-    matches => 'TTY_*.log.*',
-    age     => '60d',
-    backup  => false,
-    recurse => true,
+  if $tidy_logs {
+    # TODO : This seems a bit generic.
+    #        Is it required, or can it be made more specific?
+    tidy {'/var/log':
+      matches => 'TTY_*.log.*',
+      age     => '60d',
+      backup  => false,
+      recurse => true,
+    }
   }
 
   case $::osfamily {
@@ -56,6 +61,17 @@ class dell::openmanage (
         require => Service['dataeng'],
       }
 
+      # disable loading psrvil library to avoid crash of dataeng/dsm_sa_datamgrd
+      # on OM 8.3, for details see
+      # https://www.mail-archive.com/search?l=linux-poweredge@dell.com&q=subject:%22\[Linux\-PowerEdge\]+srvadmin+8.3.0+problems+with+dsm_sa_datamgrd%22&o=newest&f=1
+      file_line{"comment-vil7":
+        path    => '/opt/dell/srvadmin/etc/srvadmin-storage/stsvc.ini',
+        line    => "; vil7=dsm_sm_psrvil",
+        match   => "vil7=dsm_sm_psrvil",
+        before  => Service["dataeng"],
+        notify  => Service["dataeng"],
+        require => Package["srvadmin-storageservices"],
+      }
     }
 
     'Debian': {

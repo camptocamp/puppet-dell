@@ -22,10 +22,4 @@ class dell::hwtools(
   }
 
   include ::dell::hwtools::package
-
-  if $::osfamily == 'RedHat' {
-    file { '/etc/yum.repos.d/dell-software-repo.repo':
-      ensure => absent,
-    }
-  }
 }
