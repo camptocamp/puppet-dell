@@ -8,10 +8,6 @@ class dell::hwtools::package {
     }
 
     'RedHat': {
-      #package{['libsmbios', 'smbios-utils-bin']:
-      #  ensure => latest,
-      #}
-
       # removing packages is always producting a line like
       # (/Stage[main]/Dell::Hwtools/Package[smbios-utils-python]/ensure) created
       # into the log. This is a known bug, see
