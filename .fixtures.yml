@@ -3,5 +3,6 @@ fixtures:
     apt: 'puppetlabs-apt'
     stdlib: 'puppetlabs-stdlib'
     vcsrepo: 'puppetlabs-vcsrepo'
+    inifile: 'puppetlabs-inifile'
   symlinks:
     dell: "#{source_dir}"

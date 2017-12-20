@@ -1,3 +1,4 @@
+# Set up repo
 class dell::hwtools::repo {
   if $::osfamily == 'RedHat' {
     file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-dell':
@@ -9,34 +10,24 @@ class dell::hwtools::repo {
     }
 
     file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      source => 'puppet:///modules/dell/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios',
-      mode   => '0644',
+      ensure => absent,
     }
 
-    # http://linux.dell.com/wiki/index.php/Repository/software
-    yumrepo {'dell-omsa-indep':
-      descr      => 'Dell OMSA repository - Hardware independent',
-      mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_indep}",
-      enabled    => 1,
-      gpgcheck   => 1,
-      gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell\n\tfile:///etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios",
-      require    => [
-        File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
-        File['/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios'],
-        ],
+    # http://linux.dell.com/repo/hardware/dsu/
+    yumrepo {'dell-system-update_independent':
+      descr    => 'Dell OMSA repository - OS independent',
+      baseurl  => "${dell::omsa_url_base}${dell::omsa_version}/os_independent",
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell',
+      require  => File['/etc/pki/rpm-gpg/RPM-GPG-KEY-dell'],
     }
 
-    # ensure file is managed in case we want to purge /etc/yum.repos.d/
-    # http://projects.puppetlabs.com/issues/3152
-    file { '/etc/yum.repos.d/dell-omsa-indep.repo':
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      require => Yumrepo['dell-omsa-indep'],
+    file { [
+      '/etc/yum.repos.d/dell-software-repo.repo',
+      '/etc/yum.repos.d/dell-omsa-indep.repo',
+    ]:
+      ensure  => absent,
     }
   }
 }
