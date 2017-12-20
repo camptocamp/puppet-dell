@@ -67,7 +67,7 @@ class dell::openmanage (
       ini_setting { 'vil7':
         ensure  => absent,
         section => 'loadvils',
-        target  => '/opt/dell/srvadmin/etc/srvadmin-storage/stsvc.ini',
+        path    => '/opt/dell/srvadmin/etc/srvadmin-storage/stsvc.ini',
         before  => Service['dataeng'],
         notify  => Service['dataeng'],
         require => Package['srvadmin-storageservices'],
