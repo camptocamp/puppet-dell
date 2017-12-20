@@ -1,3 +1,11 @@
+## 2017-12-20 - Release 1.0.0
+
+- Use Data Types instead of validation functions (GH #75)
+- Move to Dell System Update (GH #76 and GH #78)
+- Remove support for Debian 6
+- Remove support for RedHat 5
+- Require puppetlabs/inifile
+
 ## 2017-04-06 - Release 0.6.1
 
 - Fix default repository for Red Hat 7
