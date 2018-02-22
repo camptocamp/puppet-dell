@@ -4,5 +4,7 @@ fixtures:
     stdlib: 'puppetlabs-stdlib'
     vcsrepo: 'puppetlabs-vcsrepo'
     inifile: 'puppetlabs-inifile'
+    augeas_core: 'puppetlabs-augeas_core'
+    yumrepo_core: 'puppetlabs-yumrepo_core'
   symlinks:
     dell: "#{source_dir}"
