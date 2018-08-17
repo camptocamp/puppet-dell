@@ -54,40 +54,12 @@ matrix:
     script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
   allow_failures:
     - rvm: default
-      sudo: 
-      dist: 
-      services: 
-      env: BEAKER_set="debian-6"
-      bundler_args: 
-      script: 
-    - rvm: default
-      sudo: 
-      dist: 
-      services: 
+      sudo: required
+      dist: trusty
+      services: docker
       env: BEAKER_set="debian-7"
       bundler_args: 
-      script: 
-    - rvm: default
-      sudo: 
-      dist: 
-      services: 
-      env: BEAKER_set="centos-5"
-      bundler_args: 
-      script: 
-    - rvm: default
-      sudo: 
-      dist: 
-      services: 
-      env: BEAKER_set="centos-6"
-      bundler_args: 
-      script: 
-    - rvm: default
-      sudo: 
-      dist: 
-      services: 
-      env: BEAKER_set="centos-7"
-      bundler_args: 
-      script: 
+      script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
 notifications:
   email: false
 deploy:
