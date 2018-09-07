@@ -101,8 +101,8 @@ end
 Facter.add('warranty') do
   confine :kernel => ['Linux', 'Windows']
   setcode do
-    warranty ='Unsupported'
     # Just support for dell/lenovo so far... Contribute *hint*
+    next if Facter.value('manufacturer').nil?
     next if Facter.value('manufacturer').downcase !~ /(dell.*|lenovo)/
     next if !Facter.value('serialnumber')
 
