@@ -1,3 +1,8 @@
+## 2018-09-07 - Release 1.1.0
+
+- Fix specs by allowing failures
+- Add Ubuntu 16.04 to supported OSes
+
 ## 2017-12-20 - Release 1.0.0
 
 - Use Data Types instead of validation functions (GH #75)

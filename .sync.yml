@@ -4,13 +4,10 @@
     - '*'
   forge_password: "QlLAT3W2KlpYldcAiGHW/1ABoqimNtSP01ELj8jRMY9tKde9eDyUXUkEmCsjC2FPSP8amV04tIbInpMrzHhsqXl76hK5n0RWVgV93tbbxltKvmWdzfM18UeJxOO6psUfkLgydYDtgbo12IXQbtnm5gNXiYGPnKghwOwfv+XaW98="
   allow_failures:
-    - rvm: default
-      env: BEAKER_set="debian-6"
-    - rvm: default
-      env: BEAKER_set="debian-7"
-    - rvm: default
-      env: BEAKER_set="centos-5"
-    - rvm: default
-      env: BEAKER_set="centos-6"
-    - rvm: default
-      env: BEAKER_set="centos-7"
+  - rvm: default
+    sudo: required
+    dist: trusty
+    services: docker
+    env: BEAKER_set="debian-7"
+    bundler_args:
+    script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
