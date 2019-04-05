@@ -63,7 +63,7 @@ def create_dell_warranty_cache(cache)
   # Skip writing warranty if cache file already exists and we haven't got info this time..
   # This avoids clobbering the cache with invalid info when we get an invalid response
   if File.file?(cache) && expiration_date == orig_exp_date
-    Facter.debug('warranty cache: invalid data received from Dell API, not updating..')
+    Facter.debug('warranty cache: invalid data received from Dell API, not updating.')
   else
     File.open(cache, 'w') do |file|
       YAML.dump({'warranty_status' => warranty,
