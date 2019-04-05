@@ -65,7 +65,14 @@ matrix:
       dist: trusty
       services: docker
       env: BEAKER_set="debian-7"
-      bundler_args: 
+      bundler_args:
+      script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
+    - rvm: default
+      sudo: required
+      dist: trusty
+      services: docker
+      env: BEAKER_set="ubuntu-16.04"
+      bundler_args:
       script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
 notifications:
   email: false
