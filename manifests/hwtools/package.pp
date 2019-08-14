@@ -8,7 +8,7 @@ class dell::hwtools::package {
     }
 
     'RedHat': {
-      # removing packages is always producting a line like
+      # removing packages is always producing a line like
       # (/Stage[main]/Dell::Hwtools/Package[smbios-utils-python]/ensure) created
       # into the log. This is a known bug, see
       # https://projects.puppetlabs.com/issues/12722
