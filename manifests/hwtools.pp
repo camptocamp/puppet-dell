@@ -7,12 +7,9 @@
 #  The yumrepo should have the name 'dell-omsa-indep'
 #
 class dell::hwtools(
-  $dell_repo = true,
+  Boolean $dell_repo = true,
 ) {
   include ::dell
-
-  validate_bool( $dell_repo)
-
   include ::dell::params
 
   if $dell_repo {
