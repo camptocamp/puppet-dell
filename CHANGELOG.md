@@ -1,3 +1,10 @@
+## 2019-04-05 - Release 1.2.0
+
+- Add Ubuntu 16.04 tests (failing)
+- Only resolve if manufacturer fact is not nil (#80)
+- Don't clobber existing warranty fact cache with invalid data (GH #81)
+- Update stdlib dep to <6.0.0 (fix #82)
+
 ## 2018-09-07 - Release 1.1.0
 
 - Fix specs by allowing failures

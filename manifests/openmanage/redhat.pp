@@ -7,14 +7,12 @@
 #  The yumrepo should have the name 'dell-system-update_dependent'
 #
 class dell::openmanage::redhat(
-  $dell_repo = true,
+  Boolean $dell_repo = true,
 ) {
 
   if (!defined(Class['dell'])) {
     fail 'You need to declare class dell'
   }
-
-  validate_bool( $dell_repo)
 
   # On RHEL7 there is an issue with the conflict of packages
   #   libcmpiCppImpl0 vs. tog-pegasus-libs
