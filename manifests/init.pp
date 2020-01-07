@@ -6,12 +6,10 @@ class dell (
   Stdlib::Absolutepath $customplugins           = $dell::params::customplugins,
   String               $check_warranty_revision = $dell::params::check_warranty_revision,
   Boolean              $manage_debian_apt       = $dell::params::manage_debian_apt,
-  Optional[String]     $api_key                 = undef,
   Optional[String]     $client_id               = undef,
   Optional[String]     $client_secret           = undef,
 ) inherits ::dell::params {
   class { '::dell::warranty':
-    api_key       => $api_key,
     client_id     => $client_id,
     client_secret => $client_secret,
   }

@@ -227,11 +227,10 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     'yakkety', 'zesty', 'bionic': {
-      fail("Ubuntu ${::lsbdistcodename} is not supported by Dell")
+      fail("Ubuntu ${::lsbdistcodename} is not supported by this module yet")
     }
     # TODO : Remove old and unsupported versions
-    # TODO : Switch to http://linux.dell.com/repo/community/openmanage/ for newest vers
-    #        (but only for Ubuntu as Debian doesn't support this?)
+    # TODO : Switch to http://linux.dell.com/repo/community/openmanage/ for newer versions
     default: {
       apt::source{'dell':
         location => 'http://linux.dell.com/repo/community/debian',
