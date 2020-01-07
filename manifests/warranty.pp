@@ -31,7 +31,7 @@ class dell::warranty (
     }
   }
   if $client_secret {
-    $sec_client_secret = Sensitive($client_id)
+    $sec_client_secret = Sensitive($client_secret)
 
     file { '/etc/dell_client_secret':
       content => $sec_client_secret,
