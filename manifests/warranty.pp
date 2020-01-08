@@ -5,21 +5,10 @@
 # Used by the fact in this module
 #
 class dell::warranty (
-  Optional[String] $api_key       = undef,
   Optional[String] $client_id     = undef,
   Optional[String] $client_secret = undef,
   String           $file_mode     = '0600',
 ) {
-  if $api_key {
-    $sec_api_key = Sensitive($api_key)
-
-    file { '/etc/dell_api_key':
-      content => $sec_api_key,
-      owner   => 'root',
-      group   => 'root',
-      mode    => $file_mode,
-    }
-  }
   if $client_id {
     $sec_client_id = Sensitive($client_id)
 
