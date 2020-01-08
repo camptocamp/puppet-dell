@@ -18,13 +18,10 @@ def create_dell_warranty_cache(cache)
   servicetag      = Facter.value('serialnumber')
 
   # Dell v5 API requires OAuth2 setup before the call, but this just adds one minor step
-  # (ends up with the same data in the response, in the same format!)
+  # (ends up with the same data in the response, in a very similar format to v4 responses!)
 
   begin
-    #Facter.debug("Dell API v5 : Step 1")
-
-    #dell_api_key       = File.read("/etc/dell_api_key") # Production API key needs to be grabbed from a file
-    dell_client_id     = File.read("/etc/dell_client_id") # API v5 client_id needs to be grabbed from a file
+    dell_client_id     = File.read("/etc/dell_client_id")     # API v5 client_id needs to be grabbed from a file
     dell_client_secret = File.read("/etc/dell_client_secret") # API v5 client_secret needs to be grabbed from a file
 
     # Examples using curl:
@@ -32,7 +29,6 @@ def create_dell_warranty_cache(cache)
     #   curl -X POST --data 'grant_type=client_credentials' --data 'client_id=<id>' --data 'client_secret=<secret>'  https://apigtwb2c.us.dell.com/auth/oauth/v2/token
     # 2) API v5 GET passing returned token to get JSON warranty info as before
     #   curl -X GET https://apigtwb2c.us.dell.com/PROD/sbil/eapi/v5/asset-entitlements?servicetags=BR8P7J2 --header 'Authorization: Bearer <token_returned_by_first_call>'
-    #Facter.debug("Dell API v5 : Step 2")
 
     oauth_post_uri   = URI.parse("https://apigtwb2c.us.dell.com/auth/oauth/v2/token")
     oauth_params     = {
@@ -40,45 +36,32 @@ def create_dell_warranty_cache(cache)
       :client_id     => dell_client_id,
       :client_secret => dell_client_secret,
     }
-    # TODO : Ensure SSL enabled and verified
+    # TODO : Ensure SSL verified!
     oauth_res        = Net::HTTP.post_form oauth_post_uri, oauth_params
-    #Facter.debug("Dell API v5 : Step 3")
     oauth_r          = JSON.parse(oauth_res.body)
-    #Facter.debug("Dell API v5 : Got result #{oauth_r}")
-
-    #Facter.debug("Dell API v5 : Step 4")
     bearer_token     = oauth_r['access_token']
-
-    #Facter.debug("Dell API v5 : Got bearer token #{bearer_token}")
 
     # TODO : Fail if no result or token not found
 
     # Use returned token in headers to make GET request against Dell API server
-    #Facter.debug("Dell API v5 : Step 5")
     headers = {
       'Authorization' => "Bearer #{bearer_token}"
     }
-    #Facter.debug("Dell API v5 : Step 6")
     uri              = URI.parse("https://apigtwb2c.us.dell.com/PROD/sbil/eapi/v5/asset-entitlements?servicetags=#{servicetag}")
-    #Facter.debug("Dell API v5 : Step 7")
     http             = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl     = true
     # HACK : Currently we do no SSL verification:
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     # TODO : Reject SSL failures by setting these:
     #        (but the CA file path is different per distro...)
+    # Or get cacert.pem from curl devs : https://curl.haxx.se/docs/caextract.html
+    # (thanks go to https://www.theguild.nl/ruby-and-ssl-certificate-validation/)
     #http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    #http.ca_file     = '/etc/ssl/certs/ca-bundle.crt'
-    #Facter.debug("Dell API v5 : Step 8")
+    #http.ca_file     = File.join(File.dirname(__FILE__), "cacert.pem")
     request          = Net::HTTP::Get.new(uri.request_uri, headers)
-    #Facter.debug("Dell API v5 : Step 9")
     response         = http.request(request)
-    #Facter.debug("Dell API v5 : Step 10")
     r                = JSON.parse(response.body)
-    #Facter.debug("Dell API v5 : Step 11")
-
-    #Facter.debug("Dell API v5 : got reponse body #{response.body}")
-  rescue # ...in case dell.com is down
+  rescue # ...in case dell.com is down or other failures occur
   end
 
   begin
