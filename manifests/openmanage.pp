@@ -80,16 +80,12 @@ class dell::openmanage (
       include ::dell::openmanage::debian
 
       if $dell::openmanage::debian::ver >= 950 {
-        service { 'dsm_sa_datamgrd':
-          ensure    => $service_ensure,
-          hasstatus => true,
-          tag       => 'dell',
-        }
-
-        service { 'dsm_sa_eventmgrd':
-          ensure    => $service_ensure,
-          hasstatus => true,
-          tag       => 'dell',
+        ['datamgrd', 'eventmgrd', 'snmpd'].each |$_service| {
+          service { "dsm_sa_${_service}":
+            ensure    => $service_ensure,
+            hasstatus => true,
+            tag       => 'dell',
+          }
         }
       } else {
         service { 'dataeng':
