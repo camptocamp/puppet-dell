@@ -10,11 +10,6 @@ class dell::openmanage (
 
   include ::dell::hwtools
 
-  service { 'dataeng':
-    ensure    => $service_ensure,
-    hasstatus => true,
-  }
-
   file {'/etc/logrotate.d/openmanage':
     ensure  => file,
     owner   => root,
@@ -72,10 +67,37 @@ class dell::openmanage (
         notify  => Service['dataeng'],
         require => Package['srvadmin-storageservices'],
       }
+
+      service { 'dataeng':
+        ensure    => $service_ensure,
+        hasstatus => true,
+        tag       => 'dell',
+      }
+
     }
 
     'Debian': {
       include ::dell::openmanage::debian
+
+      if $dell::openmanage::debian::ver >= 950 {
+        service { 'dsm_sa_datamgrd':
+          ensure    => $service_ensure,
+          hasstatus => true,
+          tag       => 'dell',
+        }
+
+        service { 'dsm_sa_eventmgrd':
+          ensure    => $service_ensure,
+          hasstatus => true,
+          tag       => 'dell',
+        }
+      } else {
+        service { 'dataeng':
+          ensure    => $service_ensure,
+          hasstatus => true,
+          tag       => 'dell',
+        }
+      }
     }
 
     default: {
