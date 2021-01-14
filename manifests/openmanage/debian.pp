@@ -4,13 +4,10 @@
 # Install openmanage tools on Debian
 #
 class dell::openmanage::debian {
+  assert_private ()
 
   if ($::dell::manage_debian_apt) {
     include ::apt
-  }
-
-  if (!defined(Class['dell'])) {
-    fail 'You need to declare class dell'
   }
 
   # key of:
@@ -176,16 +173,17 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  $omsa_pkg_name = $::lsbdistcodename ? {
+  $omsa_pkg_name = $facts['lsbdistcodename'] ? {
     'lenny'   => 'dellomsa',
     'squeeze' => [ 'srvadmin-base', 'srvadmin-storageservices' ],
     default   => [
       'srvadmin-base',
       'srvadmin-storageservices',
-      'srvadmin-omcommon' ],
+      'srvadmin-omcommon',
+    ],
   }
 
-  case $::lsbdistcodename {
+  case $facts['lsbdistcodename'] {
     'lenny': {
       apt::source{'dell':
         location => 'ftp://ftp.sara.nl/pub/sara-omsa',
@@ -216,21 +214,19 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         },
       }
     }
-    'jessie': {
-      apt::source{'dell':
-        location => 'http://linux.dell.com/repo/community/debian',
-        release  => 'wheezy',
-        repos    => 'openmanage',
-        include  => {
-          src       => false,
-        },
-      }
-    }
     default: {
+      $ver = $facts['lsbdistcodename'] ? {
+        'jessie'  => 911,
+        'stretch' => 911,
+        'xenial'  => 911,
+        'bionic'  => 940,
+        default   => 950,
+      }
+
       apt::source{'dell':
-        location => 'http://linux.dell.com/repo/community/debian',
-        release  => $::lsbdistcodename,
-        repos    => 'openmanage',
+        location => "http://linux.dell.com/repo/community/openmanage/${ver}/${facts['lsbdistcodename']}",
+        release  => $facts['lsbdistcodename'],
+        repos    => 'main',
         include  => {
           src       => false,
         },
@@ -241,9 +237,9 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
   package { $omsa_pkg_name:
     ensure  => present,
     require => Class['apt::update'],
-    before  => Service['dataeng'],
   }
 
   Apt::Key['42550ABD1E80D7C1BC0BAD851285491434D8786F'] -> Apt::Source['dell']
+  Package[$omsa_pkg_name] -> Service <| tag == 'dell' |>
 
 }
