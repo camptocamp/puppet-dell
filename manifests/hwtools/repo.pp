@@ -4,7 +4,8 @@ class dell::hwtools::repo {
     # http://linux.dell.com/repo/pgp_pubkeys/0x756ba70b1019ced6.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0x1285491434D8786F.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0xca77951d23b66a9d.asc
-    $dell_keys = ['RPM-GPG-KEY-dell', '0x1285491434D8786F.asc', '0x756ba70b1019ced6.asc', '0xca77951d23b66a9d.asc']
+    # http://linux.dell.com/repo/pgp_pubkeys/0x3CA66B4946770C59.asc
+    $dell_keys = ['RPM-GPG-KEY-dell', '0x1285491434D8786F.asc', '0x756ba70b1019ced6.asc', '0xca77951d23b66a9d.asc', '0x3CA66B4946770C59.asc']
     $key_paths = prefix($dell_keys, 'file:///etc/pki/rpm-gpg/')
 
     # function call with lambda:
