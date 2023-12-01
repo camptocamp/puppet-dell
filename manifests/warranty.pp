@@ -4,6 +4,10 @@
 # Install Dell API key where the fact can access it
 # Used by the fact in this module
 #
+# @param api_key
+#
+# @param file_mode
+#
 class dell::warranty (
   Optional[String] $api_key   = undef,
   String           $file_mode = '0644',

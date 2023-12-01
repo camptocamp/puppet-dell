@@ -1,6 +1,6 @@
 # Set up repo
 class dell::hwtools::repo {
-  if $::osfamily == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     # http://linux.dell.com/repo/pgp_pubkeys/0x756ba70b1019ced6.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0x1285491434D8786F.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0xca77951d23b66a9d.asc
@@ -9,7 +9,7 @@ class dell::hwtools::repo {
 
     # function call with lambda:
     $dell_keys.each |String $dell_key| {
-      file {"/etc/pki/rpm-gpg/${dell_key}":
+      file { "/etc/pki/rpm-gpg/${dell_key}":
         ensure => file,
         owner  => 'root',
         group  => 'root',
@@ -18,12 +18,12 @@ class dell::hwtools::repo {
       }
     }
 
-    file {'/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
+    file { '/etc/pki/rpm-gpg/RPM-GPG-KEY-libsmbios':
       ensure => absent,
     }
 
     # http://linux.dell.com/repo/hardware/dsu/
-    yumrepo {'dell-system-update_independent':
+    yumrepo { 'dell-system-update_independent':
       descr    => 'Dell OMSA repository - OS independent',
       baseurl  => "${dell::omsa_url_base}${dell::omsa_version}/os_independent",
       enabled  => 1,
@@ -42,10 +42,10 @@ class dell::hwtools::repo {
     }
 
     file { [
-      '/etc/yum.repos.d/dell-software-repo.repo',
-      '/etc/yum.repos.d/dell-omsa-indep.repo',
-    ]:
-      ensure  => absent,
+        '/etc/yum.repos.d/dell-software-repo.repo',
+        '/etc/yum.repos.d/dell-omsa-indep.repo',
+      ]:
+        ensure  => absent,
     }
   }
 }
