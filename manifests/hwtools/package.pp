@@ -1,8 +1,8 @@
 # Install package
 class dell::hwtools::package {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
-      package { $::dell::params::smbios_pkg:
+      package { $dell::params::smbios_pkg:
         ensure => latest,
       }
     }
@@ -17,21 +17,21 @@ class dell::hwtools::package {
       # preventing the proper upgrade. To fix it we need to
       # 'yum erase smbios-utils-python python-smbios'
       package { [
-        'smbios-utils-python',
-        'python-smbios',
-      ]:
-        ensure => purged,
-        before => Package['dell-system-update'],
+          'smbios-utils-python',
+          'python-smbios',
+        ]:
+          ensure => purged,
+          before => Package['dell-system-update'],
       }
 
-      package{['dell-system-update']:
+      package {['dell-system-update']:
         ensure  => latest,
         require => Yumrepo['dell-system-update_independent'],
       }
     }
 
     default: {
-      fail "Unsupported OS family ${::osfamily}"
+      fail "Unsupported OS family ${facts['os']['family']}"
     }
   }
 }

@@ -3,14 +3,16 @@
 #
 # Install openmanage tools
 #
+# @param service_ensure
+#
+# @param tidy_logs
+#
 class dell::openmanage (
   String  $service_ensure = 'running',
   Boolean $tidy_logs      = true,
 ) {
-
-  include ::dell::hwtools
-
-  file {'/etc/logrotate.d/openmanage':
+  include dell::hwtools
+  file { '/etc/logrotate.d/openmanage':
     ensure  => file,
     owner   => root,
     group   => root,
@@ -25,14 +27,14 @@ class dell::openmanage (
 ",
   }
 
-  file {'/etc/logrotate.d/perc5logs':
+  file { '/etc/logrotate.d/perc5logs':
     ensure  => absent,
   }
 
   if $tidy_logs {
     # TODO : This seems a bit generic.
     #        Is it required, or can it be made more specific?
-    tidy {'/var/log':
+    tidy { '/var/log':
       matches => 'TTY_*.log.*',
       age     => '60d',
       backup  => false,
@@ -40,13 +42,12 @@ class dell::openmanage (
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-
       # openmanage is a mess to install on redhat, and recent versions
       # don't support older hardware. So puppet will install it if absent,
       # or else leave it unmanaged.
-      include ::dell::openmanage::redhat
+      include dell::openmanage::redhat
 
       augeas { 'disable dell yum plugin once OM is installed':
         changes => [
@@ -73,14 +74,13 @@ class dell::openmanage (
         hasstatus => true,
         tag       => 'dell',
       }
-
     }
 
     'Debian': {
-      include ::dell::openmanage::debian
+      include dell::openmanage::debian
 
       if $dell::openmanage::debian::ver >= 950 {
-        service { [ 'dsm_sa_datamgrd', 'dsm_sa_eventmgrd', 'dsm_sa_snmpd' ]:
+        service { ['dsm_sa_datamgrd', 'dsm_sa_eventmgrd', 'dsm_sa_snmpd']:
           ensure    => $service_ensure,
           hasstatus => true,
           tag       => 'dell',
@@ -95,9 +95,7 @@ class dell::openmanage (
     }
 
     default: {
-      err("Unsupported operatingsystem: ${::osfamily}.")
+      err("Unsupported operatingsystem: ${facts['os']['family']}.")
     }
-
   }
-
 }

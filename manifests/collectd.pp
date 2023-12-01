@@ -21,7 +21,7 @@
 #
 class dell::collectd {
 
-  if $::collectd_version { # trick to check which collectd module we are using
+  if $facts['collectd_version'] { # trick to check which collectd module we are using
     collectd::config::plugin { 'monitor dell snmp':
       plugin   => 'snmp',
       settings => template('dell/collectd.conf'),
