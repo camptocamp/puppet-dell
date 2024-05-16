@@ -185,7 +185,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   case $facts['os']['distro']['codename'] {
     'lenny': {
-      apt::source{ 'dell':
+      apt::source{'dell':
         location => 'ftp://ftp.sara.nl/pub/sara-omsa',
         release  => 'dell6',
         repos    => 'sara',
