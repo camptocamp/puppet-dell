@@ -3,10 +3,7 @@
 #
 # Install hardware tools
 #
-# $dell_repo: use the dell repo for yumrepo, or a already defined one.
-#  The yumrepo should have the name 'dell-omsa-indep'
-#
-# @param dell_repo
+# @param dell_repo use the dell repo for yumrepo, or a already defined one. The yumrepo should have the name 'dell-omsa-indep'.
 #
 class dell::hwtools (
   Boolean $dell_repo = true,
