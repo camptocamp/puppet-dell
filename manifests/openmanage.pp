@@ -97,5 +97,7 @@ class dell::openmanage (
     default: {
       err("Unsupported operatingsystem: ${facts['os']['family']}.")
     }
+    
   }
+  
 }
