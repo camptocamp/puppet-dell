@@ -12,7 +12,7 @@ class dell::openmanage (
   Boolean $tidy_logs      = true,
 ) {
   include dell::hwtools
-  file { '/etc/logrotate.d/openmanage':
+  file {'/etc/logrotate.d/openmanage':
     ensure  => file,
     owner   => root,
     group   => root,
