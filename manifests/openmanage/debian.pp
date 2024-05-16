@@ -195,7 +195,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     'squeeze': {
-      apt::source{ 'dell':
+      apt::source{'dell':
         location => "${dell::omsa_url_base}${dell::omsa_version}",
         release  => '/',
         repos    => '',
@@ -205,7 +205,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     'wheezy': {
-      apt::source{ 'dell':
+      apt::source{'dell':
         location => 'http://linux.dell.com/repo/community/debian',
         release  => 'wheezy',
         repos    => 'openmanage',
@@ -223,7 +223,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         default   => 950,
       }
 
-      apt::source{ 'dell':
+      apt::source{'dell':
         location => "http://linux.dell.com/repo/community/openmanage/${ver}/${facts['os']['distro']['codename']}",
         release  => $facts['os']['distro']['codename'],
         repos    => 'main',
