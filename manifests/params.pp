@@ -21,6 +21,7 @@ class dell::params {
             default    => 'DSU_17.07.00', # latest DSU version at time of writing
           }
         } #default
+
       }
     } # RedHat
 
@@ -52,6 +53,7 @@ class dell::params {
         'PowerEdge R620'    => 'OMSA_7.2',
         default             => 'latest',
       }
+
     } # Debian
 
     default:  { fail("Unsupported OS family: ${facts['os']['family']}") }
