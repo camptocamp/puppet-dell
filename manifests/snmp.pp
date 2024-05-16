@@ -15,7 +15,7 @@ smuxpeer .1.3.6.1.4.1.674.10892.1
     notify  => Service['dataeng'],
   }
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'Debian' : {
       augeas {'snmpd enable smux':
         context => '/files/etc/default/snmpd/',

@@ -3,13 +3,15 @@
 #
 # Install openmanage tools
 #
+# @param service_ensure
+#
+# @param tidy_logs
+#
 class dell::openmanage (
   String  $service_ensure = 'running',
   Boolean $tidy_logs      = true,
 ) {
-
-  include ::dell::hwtools
-
+  include dell::hwtools
   file {'/etc/logrotate.d/openmanage':
     ensure  => file,
     owner   => root,
@@ -40,13 +42,12 @@ class dell::openmanage (
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-
       # openmanage is a mess to install on redhat, and recent versions
       # don't support older hardware. So puppet will install it if absent,
       # or else leave it unmanaged.
-      include ::dell::openmanage::redhat
+      include dell::openmanage::redhat
 
       augeas { 'disable dell yum plugin once OM is installed':
         changes => [
@@ -73,11 +74,10 @@ class dell::openmanage (
         hasstatus => true,
         tag       => 'dell',
       }
-
     }
 
     'Debian': {
-      include ::dell::openmanage::debian
+      include dell::openmanage::debian
 
       if $dell::openmanage::debian::ver >= 950 {
         service { [ 'dsm_sa_datamgrd', 'dsm_sa_eventmgrd', 'dsm_sa_snmpd' ]:
@@ -95,7 +95,7 @@ class dell::openmanage (
     }
 
     default: {
-      err("Unsupported operatingsystem: ${::osfamily}.")
+      err("Unsupported operatingsystem: ${facts['os']['family']}.")
     }
 
   }

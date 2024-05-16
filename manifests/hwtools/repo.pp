@@ -1,6 +1,6 @@
 # Set up repo
 class dell::hwtools::repo {
-  if $::osfamily == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     # http://linux.dell.com/repo/pgp_pubkeys/0x756ba70b1019ced6.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0x1285491434D8786F.asc
     # http://linux.dell.com/repo/pgp_pubkeys/0xca77951d23b66a9d.asc

@@ -6,8 +6,8 @@
 class dell::openmanage::debian {
   assert_private ()
 
-  if ($::dell::manage_debian_apt) {
-    include ::apt
+  if ($dell::manage_debian_apt) {
+    include apt
   }
 
   # key of:
@@ -173,7 +173,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  $omsa_pkg_name = $facts['lsbdistcodename'] ? {
+  $omsa_pkg_name = $facts['os']['distro']['codename'] ? {
     'lenny'   => 'dellomsa',
     'squeeze' => [ 'srvadmin-base', 'srvadmin-storageservices' ],
     default   => [
@@ -183,7 +183,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
     ],
   }
 
-  case $facts['lsbdistcodename'] {
+  case $facts['os']['distro']['codename'] {
     'lenny': {
       apt::source{'dell':
         location => 'ftp://ftp.sara.nl/pub/sara-omsa',
@@ -215,7 +215,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     default: {
-      $ver = $facts['lsbdistcodename'] ? {
+      $ver = $facts['os']['distro']['codename'] ? {
         'jessie'  => 911,
         'stretch' => 911,
         'xenial'  => 911,
@@ -224,8 +224,8 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
 
       apt::source{'dell':
-        location => "http://linux.dell.com/repo/community/openmanage/${ver}/${facts['lsbdistcodename']}",
-        release  => $facts['lsbdistcodename'],
+        location => "http://linux.dell.com/repo/community/openmanage/${ver}/${facts['os']['distro']['codename']}",
+        release  => $facts['os']['distro']['codename'],
         repos    => 'main',
         include  => {
           src       => false,

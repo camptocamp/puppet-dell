@@ -3,13 +3,11 @@
 #
 # Install openmanage tools on RedHat
 #
-# $dell_repo: use the dell repo for yumrepo, or a already defined one.
-#  The yumrepo should have the name 'dell-system-update_dependent'
+# @param dell_repo use the dell repo for yumrepo, or a already defined one. The yumrepo should have the name 'dell-omsa-indep'.
 #
-class dell::openmanage::redhat(
+class dell::openmanage::redhat (
   Boolean $dell_repo = true,
 ) {
-
   if (!defined(Class['dell'])) {
     fail 'You need to declare class dell'
   }
@@ -22,7 +20,7 @@ class dell::openmanage::redhat(
   #   one. For us it means 'yum erase tog-pegasus-libs'
   #   before installing om5.
 
-  if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+  if versioncmp($facts['os']['release']['major'], '7') >= 0 {
     package { 'tog-pegasus-libs':
       ensure => purged,
       before => Package['srvadmin-base', 'srvadmin-storageservices'],
@@ -72,13 +70,12 @@ class dell::openmanage::redhat(
   # See http://lists.us.dell.com/pipermail/linux-poweredge/2013-March/047794.html
   # This file is a kind a merge between /etc/init.d/ipmi (provided by OpenIPMI)
   # and /etc/init.d/dsm_sa_ipmi (provided by OMSA 7.2)
-  case $::operatingsystemrelease {
-
+  case $facts['os']['release']['major'] {
     '6.4': {
       $module_path = get_module_path($module_name)
       file { '/etc/init.d/dsm_sa_ipmi':
         ensure  => file,
-        content => file("${module_path}/files/etc/init.d/dsm_sa_ipmi.${::osfamily}.${::lsbdistrelease}"),
+        content => file("${module_path}/files/etc/init.d/dsm_sa_ipmi.${facts['os']['family']}.${facts['os']['release']['full']}"),
         mode    => '0755',
         seluser => 'system_u',
         selrole => 'object_r',

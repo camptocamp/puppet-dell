@@ -1,8 +1,8 @@
 # Install package
 class dell::hwtools::package {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
-      package { $::dell::params::smbios_pkg:
+      package { $dell::params::smbios_pkg:
         ensure => latest,
       }
     }
@@ -31,7 +31,7 @@ class dell::hwtools::package {
     }
 
     default: {
-      fail "Unsupported OS family ${::osfamily}"
+      fail "Unsupported OS family ${facts['os']['family']}"
     }
   }
 }
