@@ -241,4 +241,5 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   Apt::Key['42550ABD1E80D7C1BC0BAD851285491434D8786F'] -> Apt::Source['dell']
   Package[$omsa_pkg_name] -> Service <| tag == 'dell' |>
+
 }
