@@ -17,14 +17,14 @@ class dell::hwtools::package {
       # preventing the proper upgrade. To fix it we need to
       # 'yum erase smbios-utils-python python-smbios'
       package { [
-          'smbios-utils-python',
-          'python-smbios',
-        ]:
-          ensure => purged,
-          before => Package['dell-system-update'],
+        'smbios-utils-python',
+        'python-smbios',
+      ]:
+        ensure => purged,
+        before => Package['dell-system-update'],
       }
 
-      package {['dell-system-update']:
+      package{['dell-system-update']:
         ensure  => latest,
         require => Yumrepo['dell-system-update_independent'],
       }

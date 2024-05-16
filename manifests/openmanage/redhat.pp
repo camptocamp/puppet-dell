@@ -41,7 +41,7 @@ class dell::openmanage::redhat (
   #
   if $dell_repo {
     # http://linux.dell.com/repo/hardware/dsu/
-    yumrepo { 'dell-system-update_dependent':
+    yumrepo {'dell-system-update_dependent':
       descr      => 'Dell OMSA repository - OS dependent',
       mirrorlist => "${dell::omsa_url_base}${dell::omsa_version}/mirrors.cgi?${dell::omsa_url_args_dependent}",
       enabled    => 1,
@@ -62,11 +62,11 @@ class dell::openmanage::redhat (
 
   # clean up legacy repo files.
   file { [
-      '/etc/yum.repos.d/dell-hardware-auto.repo',
-      '/etc/yum.repos.d/dell-hardware-main.repo',
-      '/etc/yum.repos.d/dell-omsa-specific.repo',
-    ]:
-      ensure => absent,
+    '/etc/yum.repos.d/dell-hardware-auto.repo',
+    '/etc/yum.repos.d/dell-hardware-main.repo',
+    '/etc/yum.repos.d/dell-omsa-specific.repo',
+  ]:
+    ensure => absent,
   }
 
   # Patch for RHEL6.4, waiting for new OMSA release
@@ -83,11 +83,11 @@ class dell::openmanage::redhat (
         seluser => 'system_u',
         selrole => 'object_r',
         seltype => 'initrc_exec_t',
-        before  => [Service['dataeng']],
+        before  => [ Service['dataeng'] ],
       }
     }
 
-    default: {
-    }
+    default: {}
+
   }
 }

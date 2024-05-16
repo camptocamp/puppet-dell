@@ -27,14 +27,14 @@ class dell::openmanage (
 ",
   }
 
-  file { '/etc/logrotate.d/perc5logs':
+  file {'/etc/logrotate.d/perc5logs':
     ensure  => absent,
   }
 
   if $tidy_logs {
     # TODO : This seems a bit generic.
     #        Is it required, or can it be made more specific?
-    tidy { '/var/log':
+    tidy {'/var/log':
       matches => 'TTY_*.log.*',
       age     => '60d',
       backup  => false,
@@ -80,7 +80,7 @@ class dell::openmanage (
       include dell::openmanage::debian
 
       if $dell::openmanage::debian::ver >= 950 {
-        service { ['dsm_sa_datamgrd', 'dsm_sa_eventmgrd', 'dsm_sa_snmpd']:
+        service { [ 'dsm_sa_datamgrd', 'dsm_sa_eventmgrd', 'dsm_sa_snmpd' ]:
           ensure    => $service_ensure,
           hasstatus => true,
           tag       => 'dell',

@@ -62,4 +62,5 @@ class dell::params {
   $manage_debian_apt = true
 
   $check_warranty_revision = '42d157c57b1247e651021098b278adf14e468805'
+
 }

@@ -30,7 +30,7 @@ class dell::openmanage::debian {
     default    => 'absent',
   }
 
-  apt::key { '4A801EC6AFCAF6474226759861872CD922D16719':
+  apt::key {'4A801EC6AFCAF6474226759861872CD922D16719':
     ensure  => present,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)
@@ -64,7 +64,7 @@ Fe9CK7rViEkEGBECAAkFAkXMKU0CGwwACgkQYYcs2SLRZxkfhACgkY453IigmYZl
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key { '87C508DB69454A0101A9B852E74433E25E3D7775':
+  apt::key {'87C508DB69454A0101A9B852E74433E25E3D7775':
     ensure  => $key_omsa6,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
@@ -100,7 +100,7 @@ QanLpjDk1ri9fzZiUU+cSuIl3A==
 -----END PGP PUBLIC KEY BLOCK-----',
   }
 
-  apt::key { '42550ABD1E80D7C1BC0BAD851285491434D8786F':
+  apt::key {'42550ABD1E80D7C1BC0BAD851285491434D8786F':
     ensure  => $key_omsa7,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
@@ -175,7 +175,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   $omsa_pkg_name = $facts['os']['distro']['codename'] ? {
     'lenny'   => 'dellomsa',
-    'squeeze' => ['srvadmin-base', 'srvadmin-storageservices'],
+    'squeeze' => [ 'srvadmin-base', 'srvadmin-storageservices' ],
     default   => [
       'srvadmin-base',
       'srvadmin-storageservices',
@@ -185,7 +185,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
 
   case $facts['os']['distro']['codename'] {
     'lenny': {
-      apt::source { 'dell':
+      apt::source{ 'dell':
         location => 'ftp://ftp.sara.nl/pub/sara-omsa',
         release  => 'dell6',
         repos    => 'sara',
@@ -195,7 +195,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     'squeeze': {
-      apt::source { 'dell':
+      apt::source{ 'dell':
         location => "${dell::omsa_url_base}${dell::omsa_version}",
         release  => '/',
         repos    => '',
@@ -205,7 +205,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
       }
     }
     'wheezy': {
-      apt::source { 'dell':
+      apt::source{ 'dell':
         location => 'http://linux.dell.com/repo/community/debian',
         release  => 'wheezy',
         repos    => 'openmanage',
@@ -223,7 +223,7 @@ SNnmxzdpR6pYJGbEDdFyZFe5xHRWSlrC3WTbzg==
         default   => 950,
       }
 
-      apt::source { 'dell':
+      apt::source{ 'dell':
         location => "http://linux.dell.com/repo/community/openmanage/${ver}/${facts['os']['distro']['codename']}",
         release  => $facts['os']['distro']['codename'],
         repos    => 'main',
