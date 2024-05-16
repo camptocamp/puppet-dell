@@ -55,6 +55,7 @@ class dell::params {
     } # Debian
 
     default:  { fail("Unsupported OS family: ${facts['os']['family']}") }
+
   }
 
   $customplugins = '/usr/local/src'
